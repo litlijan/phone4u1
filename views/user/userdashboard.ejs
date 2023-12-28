@@ -1,0 +1,166 @@
+<%-include('./partials/user-header') %>
+<%-include('./partials/user-nav') %>
+<!-- banner -->
+<section class="banner-section">
+    <div class="conatiner">
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <img src="/images/iphone.png" class="img-fluid" alt="banner image">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="banner-section">
+    <div class="conatiner">
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <img src="/images/oneplus.png" class="img-fluid" alt="banner image">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="col-12">         </div>
+<section class="banner-section">
+    <div class="conatiner">
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <img src="/images/banner.png" class="img-fluid" alt="banner image">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- <div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <img src="/images/card i.png" class="img-fluid" alt="Image 1">
+            
+        </div>
+        <div class="col-md-4">
+            <img src="/images/card real.png" class="img-fluid" alt="Image 2">
+        </div>
+        <div class="col-md-4">
+            <img src='/images/card one plus.png' class="img-fluid" alt="Image 3">
+        </div>
+    </div>
+</div> -->
+
+<!-- <section class="banner-section">
+    <div class="conatiner">
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <img src="/images/ultra banner.png" class="img-fluid" alt="banner image">
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+<hr class="hr" />
+
+<div class="container">
+    <div class="row">
+        <% products.forEach(function(product){%>
+        <!-- <div class="container-fluid" style="display: flex;"> -->
+ 
+   
+        <div class="col-md-3">
+            <a href="/userProductDetails/<%=product._id %>" class="text-decoration-none text-dark">
+            <img src="/uploads/<%=product.images[0] %>" class="img-fluid" alt="Image 1"   >
+            <div class="caption">
+                <h5><%=product.name%></h5>
+                <p>Rs <%= product.price-product.discount %></p>
+                <!-- <div class="col-8">
+                    <a href="#" class="btn btn-dark w-100 p-3 rounded-0 text-warning">ADD TO CART</a>
+                  </div> -->
+            </div>
+        </a>
+         </div>
+        <!-- <div class="container m-4">
+            <div class="card border-0 rounded-0 shadow" style="width: 18rem;">
+              <img src="/uploads/<%=product.images[0] %>" class="img" alt="...">
+              <div class="card-body mt-3 mb-3">
+                <div class="row">
+                  <div class="col-10">
+                    <h4 class="card-title">Product title</h4>
+                    <p class="card-text">
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      (123)
+                    </p>
+                  </div>
+                  <div class="col-2">
+                    <i class="bi bi-bookmark-plus fs-2"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="row align-items-center text-center g-0">
+                <div class="col-4">
+                  <h5>$129</h5>
+                </div>
+                <div class="col-8">
+                  <a href="#" class="btn btn-dark w-100 p-3 rounded-0 text-warning">ADD TO CART</a>
+                </div>
+              </div>
+            </div>
+          </div> -->
+        
+        <% }) %>
+   
+    </div>
+</div>
+<div class="container mt-5 p-md-5">
+    <div class="text-center">
+        <button type="button" class="btn btn-danger">view all product</button>
+    </div>
+  </div>
+
+<!-- <section class="banner-section">
+    <div class="conatiner"> 
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <img src="/images/oppo.png" class="img-fluid" alt="banner image">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<p style="text-decoration: underline;">Featured</p>
+<h1 style="text-decoration: underline;">New Arrival</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-5" style="margin-top: 110px;">
+            <img src="/images/oneplus115g.jpg" class="img-fluid" alt="Image 1">
+        </div>
+        <div class="col-md-7">
+            <img src="/images/s23.jpg" class="img-fluid" alt="Image 2">
+        </div>
+        
+    </div>
+</div>
+<section class="banner-section">
+    <div class="conatiner"> 
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <img src="/images/footerbanner.svg" class="img-fluid" alt="banner image">
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+
+
+
+<%-include('./partials/user-footer') %>

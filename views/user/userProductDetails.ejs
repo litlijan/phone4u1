@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HomePage</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Italianno' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="/css/admin/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/js-image-zoom@0.4.1/js-image-zoom.js" type="application/javascript"></script>
+
+</head>
+
+<body>
+
+    <%-include('./partials/user-nav') %>
+
+        <div class="container">
+
+            <div class="row d-flex justify-content-center">
+
+                <div class="col-md-6  py-5 my-5">
+                    <div class="row">
+
+                        <div class="col-2">
+                            <div class="col-12 my-1" id=".thumbnail-image">
+                                <img class="thumbnail-image" src="/uploads/<%=displayProduct.images[0]%>"
+                                    style="width: 100px; height: 100px;" alt="">
+                            </div>
+                            <div class="col-12 my-1" id=".thumbnail-image">
+                                <img class="thumbnail-image" src="/uploads/<%=displayProduct.images[1]%>"
+                                    style="width: 100px; height: 100px;" alt="">
+                            </div>
+                            <div class="col-12 my-1" id=".thumbnail-image">
+                                <img class="thumbnail-image" src="/uploads/<%=displayProduct.images[2]%>"
+                                    style="width: 100px; height: 100px;" alt="">
+                            </div>
+                            <div class="col-12 my-1" id=".selected-image">
+                                <img class="thumbnail-image" src="/uploads/<%=displayProduct.images[3]%>"
+                                    style="width: 100px; height: 100px;" alt="">
+                            </div>
+                        </div>
+                        <div class="col-10">
+                            <div class="col-12 d-flex justify-content-center" id="lijan">
+                                <img class="selected-image img-fluid" src="/uploads/<%=displayProduct.images[0]%>"
+                                    style="width: auto; height: 450px;" alt="">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="col-md-6 py-5 my-5">
+
+                    <p class="fw-bold fs-3">
+                        <%= displayProduct.name%>
+                    </p>
+
+                    <p class="text-secondary small">
+                        <%= displayProduct.description%>
+                    </p>
+
+                    <p class="text-secondary ">Category: <%= displayProduct.category.name%>
+                    </p>
+
+                    <p class="text-secondary ">Brand: <%= displayProduct.brand.name%>
+                    </p>
+
+                    <p class="text-secondary">Actual Price: <span class="fw-bold text-dark"><del>₹<%=
+                                    displayProduct.price%></del></span></p>
+
+                    <p class="text-secondary">Offer Price: <span class="fw-bold text-success">₹<%=
+                                displayProduct.price-displayProduct.discount%></span></p>
+
+                    <p class="text-secondary "> Stock: <%= displayProduct.stock%>
+                    </p>
+
+                    <p class="text-secondary "> Status:
+                        <% if (displayProduct.stock> 0 ) { %>
+                            <span class="text-success fw-bold">
+                                <%= displayProduct.status %>
+                            </span>
+
+                            <% }else { %>
+                                <span class="text-danger fw-bold">
+                                    <%= displayProduct.status %>
+                                </span>
+                                <% } %>
+                    </p>
+                    <div class="btn btn-outline-dark me-3" onclick="addtocart('<%=displayProduct._id %>')">Add to Cart
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+            async function addtocart(productid,id) {
+    alert("okkkkk");
+
+    const url = '/addtocart/';
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({productid}),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+         
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+         
+            alert('Added to cart successfully');
+            console.log(response,'response')
+            console.log(response.message,'mressage');
+            if(response.message){
+                alert(message  );
+                
+            }
+            // window.location.href='/user/cart'
+        } else {
+            // Handle other status codes if needed
+            alert('Failed to add to cart');
+        }
+    } catch (error) {
+        // Handle any fetch-related errors
+        console.error('Error:', error);
+        alert('An error occurred while adding to cart');
+    }
+}
+
+            $(document).ready(function () {
+                $(".thumbnail-image").click(function () {
+                    var newImageSrc = $(this).attr("src");
+                    $(".selected-image").attr("src", newImageSrc);
+                });
+            });
+        </script>
+        <script>
+            var options = {
+                width: 300,
+                height: 500,
+                zoomWidth: 150,
+                offset: { vertical: 0, horizontal: 10 }
+            };
+
+            new ImageZoom(document.getElementById("lijan"), options);
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+        <script>
+            // function buynow(itemid) {
+            //     const sizeElement = document.getElementById('size');
+            //     const colorElement = document.getElementById('color');
+            //     const selectedSize = sizeElement.value;
+            //     const selectedColor = colorElement.value;
+            //     const url = '/cart/buynowCheckout?pdid=' + itemid + '&size=' + selectedSize + '&color=' + selectedColor;
+
+            //     window.location.href = url;
+            // }
+            function addToCart(itemId) {
+                const sizeElement = document.getElementById('size');
+                const colorElement = document.getElementById('color');
+                const selectedSize = sizeElement.value;
+                const selectedColor = colorElement.value;
+                const url = '/add_to_cart';
+
+
+                const data = {
+                    key: itemId,
+                    size: selectedSize,
+                    color: selectedColor
+
+
+                };
+
+                const headers = {
+                    'Content-Type': 'application/json',
+                };
+
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(data),
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            const addtocart = document.getElementById('addtocart')
+                            const animation = document.getElementById('animation')
+                            setTimeout(() => {
+                                addtocart.textContent = "Add to cart"
+                                animation.style.display = "none"
+                            }, 2000)
+
+                            animation.style.display = "block"
+                            addtocart.textContent = "added "
+                            console.log('Item added to the cart.');
+                        } else {
+
+                            console.error('Error adding item to the cart.');
+                        }
+                    })
+                    .catch(error => {
+
+                        console.error('Network error:', error);
+                    });
+            }
+        </script>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+</body>
+
+</html>

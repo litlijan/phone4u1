@@ -1,0 +1,24 @@
+html,
+body,
+.intro {
+  height: 100%;
+}
+
+
+
+table td,
+table th {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+thead th,
+tbody th {
+  color: #000000;
+}
+
+tbody td {
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.65);
+}

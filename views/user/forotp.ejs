@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!-- Coding By CodingNepal - codingnepalweb.com -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>OTP Verification Form</title>
+    <link rel="stylesheet" href="/css/forotp.css" />
+    <!-- Boxicons CSS -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+   <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <i class="bx bxs-check-shield"></i>
+      </header>
+      <% if(typeof message !== "undefined"){%>
+      <div class="text-danger" style=" font-size: smaller;"><%-message%></div>
+      <%}%>
+      <h4>Enter OTP Code</h4>
+      <form action="/postforotp" method="post">
+        <div class="input-field">
+          <input name="otp1" type="number" />
+          <input name="otp2" type="number" disabled />
+          <input name="otp3" type="number" disabled />
+          <input name="otp4" type="number" disabled />
+        </div>
+        <button>Verify OTP</button>
+      </form>
+    </div>
+    <script> const inputs = document.querySelectorAll("input"),
+      button = document.querySelector("button");
+    
+    
+    inputs.forEach((input, index1) => {
+      input.addEventListener("keyup", (e) => {
+        const currentInput = input,
+          nextInput = input.nextElementSibling,
+          prevInput = input.previousElementSibling;
+        if (currentInput.value.length > 1) {
+          currentInput.value = "";
+          return;
+        }
+        if (nextInput && nextInput.hasAttribute("disabled") && currentInput.value !== "") {
+          nextInput.removeAttribute("disabled");
+          nextInput.focus();
+        }
+        if (e.key === "Backspace") {
+          inputs.forEach((input, index2) => {
+
+            if (index1 <= index2 && prevInput) {
+              input.setAttribute("disabled", true);
+              input.value = "";
+              prevInput.focus();
+            }
+          });
+        }
+        if (!inputs[3].disabled && inputs[3].value !== "") {
+          button.classList.add("active");
+          return;
+        }
+        button.classList.remove("active");
+      });
+    });
+    window.addEventListener("load", () => inputs[0].focus());</script>
+  </body>
+</html>

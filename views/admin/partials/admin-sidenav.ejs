@@ -1,0 +1,84 @@
+<head>
+  
+    <link href='https://fonts.googleapis.com/css?family=Italianno' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="/css/admin/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+</head>
+
+<nav class="navbar navbar-expand-lg main-nav">
+    <div class="container-fluid d-flex align-items-center border">
+        <button class="btn btn-outline-light border" type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <a class="navbar-brand fs-2 ps-3" href="#"
+        style="font-style: italic; text-shadow: 0px 0px 4px black; ">phone4u</a>
+        <div class="collapse navbar-collapse d-flex justify-content-end">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="btn btn-dark " href="/admin">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>      
+
+<!-- Offcanvas menu -->
+<div class="offcanvas offcanvas-start d-lg-block d-none" tabindex="-1" id="offcanvasMenu"
+    aria-labelledby="offcanvasMenuLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasMenuLabel">ADMINS OPTIONS</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+        <ul class="list-group custom-list">
+            <a href="/admin/admindashboard" class="list-group-item custom-list-item">
+                <i class="fas fa-house me-2"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="/admin/product" class="list-group-item custom-list-item">
+                <i class="fas fa-bag-shopping me-2"></i>
+                <span>Products</span>
+            </a>
+            <a href="/admin/order_list" class="list-group-item custom-list-item">
+                <i class="fas fa-cart-shopping me-2"></i>
+                <span>Orders</span>
+            </a>
+            <a href="/admin/mangeuser" class="list-group-item custom-list-item">
+                <i class="fas fa-users me-2"></i>
+                <span>user</span>
+            </a>
+            <a href="/admin/coupons" class="list-group-item custom-list-item">
+                <i class="fas fa-id-card me-2"></i>
+                <span>Coupons</span>
+            </a>
+            <a href="/admin/banners" class="list-group-item custom-list-item">
+                <i class="fas fa-flag me-2"></i>
+                <span>Banners</span>
+            </a>
+            <a href="/admin/brand" class="list-group-item custom-list-item">
+                <i class="fas fa-user-plus me-2"></i>
+                <span>Brands</span>
+            </a>
+            <a href="/admin/category" class="list-group-item custom-list-item">
+                <i class="fas fa-list me-2"></i>
+                <span>Categories</span>
+            </a>
+            <a href="/admin/payments" class="list-group-item custom-list-item">
+                <i class="fas fa-money-bill me-2"></i>
+                <span>Payments</span>
+            </a>
+        </ul>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+
+<script>
+    var myOffcanvas = new bootstrap.Offcanvas(document.getElementById('staticBackdrop'));
+</script>
