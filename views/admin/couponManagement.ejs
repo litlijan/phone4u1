@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link rel="stylesheet" href="/css/adminstyle.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <%-include('./partials/admin-sidenav') %>
+
+
+<div class="details">
+    <div class="recentOrders">
+        <div class="cardHeader">
+            <h1>Coupon Management</h1>
+            <button class="btn me-2" data-bs-toggle="modal" data-bs-target="#addCouponModal">
+                <i class="fas fa-plus-circle"></i> Add Coupon
+            </button>
+        </div>
+
+        <div class="col-12 mt-5">
+            <div class="container">
+              <div class="row">
+                <% coupon.forEach(function(coupon){%>
+                <div class="col-md-6 mb-3">
+                  <div class="card coupon-card glow-on-hover" style="height: 500px;" >
+                    <div class="card-body">
+                        <h5 class="card-title">COUPON NAME : <%=coupon.couponName%></h5>
+                        <p class="card-text">COUPON CODE : <%=coupon.couponCode%></p>
+                        <p class="card-text">DISCOUNT TYPE : <%=coupon.discountType%></p>
+                        <p class="card-text">AMOUNT : <%=coupon.amount%></p>
+                        <p class="card-text">COUPON TYPE : <%=coupon.couponType%></p>
+                        <% let dt=new Date(coupon.startDate)%>
+                      
+                       
+                        <p class="card-text">START DATE :  <%=dt.getDate()%>/<%=dt.getMonth()+1%>/<%=dt.getFullYear()%>  %></p>
+                        <% if ( date < coupon.endDate){%>
+                          <% let dte=new Date(coupon.endDate) %>
+                          
+                          <p class="card-text">EXPIRES ON :   <%=dte.getDate()%>/<%=dte.getMonth()+1%>/<%=dte.getFullYear()%>  %></p>
+                        <%}else{%>
+                          <% let de=new Date(coupon.endDate) %>
+                          <p class="card-text text-danger">EXPIRED ON :<%=de.getDate()%>/<%=de.getMonth()+1%>/<%=de.getFullYear()%>  %></p>
+                        <%}%>
+                        <button class="btn btn-dark" onclick="editCoupon('<%= coupon._id %>')">Edit Coupon</button>
+                          <button class="btn " onclick="deleteCoupon('<%= coupon._id %>')">
+                            <i class="fa-solid fa-trash <%= date > coupon.endDate ? 'fa-bounce' : '' %> fa-2x" style="color: #000000;"></i>
+                          </button>                        
+                      </div>
+                    </div>
+                  </div>
+                  <% }) %>
+                </div>
+              </div>
+            </div>
+
+
+    </div>
+</div>
+
+
+<div class="modal fade" id="addCouponModal" tabindex="-1" aria-labelledby="addCouponModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h3 class="modal-title" id="addCouponModalLabel">Add Coupon</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form id="couponForm" >
+                    <div
+                      id="flashMessage"
+                      class="alert alert-danger"
+                      style="display: none"
+                    ></div>
+                    <div class="form-group">
+                      <label for="couponName">Name of Coupon</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="couponName"
+                        name="couponName"
+                        placeholder="Enter the name of coupon"
+                        required
+                      />
+                    </div>
+                    <br />
+                    <div class="form-group">
+                      <label for="couponCode">Coupon Code</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="couponCode"
+                        name="couponCode"
+                        placeholder="Enter coupon code"
+                        required
+                      />
+                    </div>
+                    <br />
+                    <div class="form-group">
+                      <label>Discount Type:</label>
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="discountType"
+                          value="percentage"
+                          id="percentageRadio"
+                        />
+                        <label class="form-check-label" for="percentageRadio"
+                          >Percentage</label
+                        >
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="discountType"
+                          value="fixed"
+                          id="fixedRadio"
+                        />
+                        <label class="form-check-label" for="fixedRadio">Fixed</label>
+                      </div>
+                    </div>
+                    <div class="form-group" id="percentageFields" style="display: none">
+                      <br />
+                      <label for="percentage">Discount Percentage</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="percentage"
+                        name="amount"
+                        min="0"
+                        max="100"
+                        placeholder="Enter the Discount Percentage"
+                      />
+                      <br />
+                      <label for="minAmount">Minimum Amount</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="minAmount"
+                        name="minAmount"
+                        placeholder="Enter the Minimum Amount to Apply Coupon"
+                      />
+                      <br />
+                      <label for="maxAmount">Maximum Amount</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="maxAmount"
+                        name="maxAmount"
+                        placeholder="Enter the Maximum Amount that can be deducted"
+                      />
+                    </div>
+                    <div class="form-group" id="fixedFields" style="display: none">
+                      <br />
+                      <label for="amount">Amount</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="amount"
+                        name="amount"
+                        placeholder="Enter the amount that will be deducted"
+                    
+                      />
+                      <br />
+                      <label for="minAmountFixed">Minimum Amount</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="minAmount"
+                        name="minAmountFixed"
+                        placeholder="Enter the Minimum Amount to Apply Coupon"
+                        
+                      />
+                    </div>
+                    <br />
+                    <div class="form-group">
+                      <label for="amount">Usage Limit</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="limit"
+                        name="limit"
+                        placeholder="Enter the Limit for the number of uses for each customer"
+                      
+                      />
+                    </div>
+                    <br />
+                    <div class="form-group">
+                      <label for="couponType">Coupon Type</label>
+                      <select class="form-control" id="couponType" name="couponType">
+                        <option value="public">Public</option>
+                        <option value="private">Private</option>
+                      </select>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                      <label for="startDate">Start Date</label>
+                      <input
+                        type="date"
+                        class="form-control"
+                        id="startDate"
+                        name="startDate"
+                        placeholder="Select the date to validate the Coupon"
+                        required
+                      />
+                    </div>
+                    <br />
+                    <div class="form-group">
+                      <label for="endDate">End Date</label>
+                      <input
+                        type="date"
+                        class="form-control"
+                        id="endDate"
+                        name="endDate"
+                        placeholder="Select the date for Expiration of coupon"
+                        required
+                      />
+                    </div>
+                    <br />
+                    <div class="form-group">
+                      <button type="submit" class="btn btn-dark">Create Coupon</button>
+                    </div>
+                  </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  Close
+                </button>
+              </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+  $(document).ready(function () {
+      $('input[name="discountType"]').change(function () {
+          if ($('#percentageRadio').is(':checked')) {
+              $('#percentageFields').show();
+              $('#fixedFields').hide();
+          } else if ($('#fixedRadio').is(':checked')) {
+              $('#percentageFields').hide();
+              $('#fixedFields').show();
+          }
+      });
+
+      $("#couponForm").submit(function (e) {
+          e.preventDefault();
+
+          // Validate start date
+          var startDate = new Date($("#startDate").val());
+          var currentDate = new Date();
+          if (startDate < currentDate) {
+              $("#flashMessage").text("Start date must be greater than or equal to the current date.").show();
+              return;
+          }
+
+          // Validate end date
+          var endDate = new Date($("#endDate").val());
+          if (endDate <= startDate) {
+              $("#flashMessage").text("End date must be greater than start date.").show();
+              return;
+          }
+
+          // Validate no spaces in the coupon code
+          var couponCode = $("#couponCode").val();
+          if (/\s/.test(couponCode)) {
+              $("#flashMessage").text("Coupon code cannot contain spaces.").show();
+              return;
+          }
+
+          // If all validations pass, proceed with form submission
+          $.ajax({
+              url: "/admin/addCoupon",
+              method: "POST",
+              data: $("#couponForm").serialize(),
+              success: function (response) {
+                  if (response.success) {
+                      console.log(response);
+                      console.log("Coupon added successfully");
+                      window.location.reload();
+                      $("#addCouponModal").modal("hide");
+                      alert("Coupon Added successfully");
+                  } else {
+                      console.log(response.error);
+                      $("#flashMessage").text(response.error).show();
+                  }
+              },
+              error: function (xhr, status, error) {
+                  console.log("Error:", error);
+                  $("#flashMessage").text("An error occurred. Please try again.").show();
+              },
+          });
+      });
+  });
+
+  // Function to submit the form
+  function submitCouponForm() {
+      $("#couponForm").submit();
+  }
+
+  function editCoupon(couponId) {
+      window.location.href = `/admin/editCoupon/${couponId}`;
+  }
+
+  function deleteCoupon(couponId) {
+      $.ajax({
+          url: "/admin/deleteCoupon/" + couponId,
+          method: "DELETE",
+          success: function (response) {
+              if (response.success) {
+                  console.log("Coupon deleted successfully");
+                  location.reload();
+              } else {
+                  console.log("Error deleting coupon: " + response.error);
+              }
+          },
+          error: function (xhr, status, error) {
+              console.log("Error:", error);
+          }
+      });
+  }
+</script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+      integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

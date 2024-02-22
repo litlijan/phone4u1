@@ -5,6 +5,7 @@ const moment = require("moment")
 const flash = require("express-flash")
 // Product GET
 const product_get = async (req, res) => {
+   try {
     const title = "product"
     var i = 0
     const page = parseInt(req.query.page) || 1; 
@@ -19,6 +20,9 @@ const product_get = async (req, res) => {
         perPage,
         totalCount,
         totalPages: Math.ceil(totalCount / perPage), })
+   } catch (error) {
+    console.log(error);
+   }
 }
 
 //  Add product GET
@@ -28,13 +32,9 @@ const addproduct_get = async (req, res) => {
     try {
         const brands = await brand.find({}).sort({ name: 1 })
         const categoryData = await category.find()
-        console.log("///////", categoryData);
         res.render("./admin/addproduct", { brands, categoryData })
 
-        // const title="product"
-
-        // const categoryData=await category.find()
-        // res.render('./admin/addproduct',{title,categoryData})
+       
     } catch (error) {
         console.log(error);
     }
@@ -42,10 +42,7 @@ const addproduct_get = async (req, res) => {
 
 // Add product POST
 const addproduct_post = async (req, res) => {
-    // const{title,brand,category,description,price,quantity,color,size}=req.body
-    // const images=req.files
-
-    // const exist_product=await  product.findOne({title:title})
+  
     try {
         const images = []
         const newCategory = await category.findOne({ name: req.body.category })
@@ -85,21 +82,7 @@ const addproduct_post = async (req, res) => {
     } catch (error) {
         console.log(error);
     }
-    //   {
-    //   res.redirect('/admin/product')
 
-    // }
-    // const  addproduct_post= async (req, res) => {
-    //   res.render('./admin/addproduct')
-    // }
-
-    // if(exist_product){
-    //     res.redirect('/admin/product?message=This product already exists')
-    // }else{
-
-    //     console.log(new_product)
-    //     res.redirect('/admin/product')
-    // }
 
 }
 const getBlockProduct = async (req, res) => {
@@ -207,15 +190,13 @@ const deleteimage=async(req,res)=>
             return
         }
         var img=productimage.images.splice(imageIndex, 1);
-        // console.log(img,"kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
-        console.log(img,"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         await productimage.save();
         res.status(200).json({success:true,message:"image deleted successfully"})
     
     }catch (error) {
         console.error('Error deleting image:', error);
         res.status(500).json({success:false,message:'Failed to delete image'});
-    }
+    }
 
 }
 

@@ -5,10 +5,9 @@ const admincontroller = require('../contoller/admincontroller');
 const productController = require('../contoller/productcontroller');
 const auth = require('../middleware/adminauth');
 const brandcontroller = require('../contoller/brandcontroller');
-const ordercontroller =require('../contoller/orderController')
-// const productStorage=require('../middleware/multer')
-// const productUpload = multer({uploadMulter:productStorage})
-// const {adminExist,verifyadmin}=require('../middleware/adminauth')
+const ordercontroller =require('../contoller/orderController');
+const couponController =require('../contoller/couponController')
+
 
 
 
@@ -51,9 +50,35 @@ adminrouter.get("/deleteBrand/:id", auth.authMiddleware, brandcontroller.deleteB
 adminrouter.get("/editBrand/:id", auth.authMiddleware, brandcontroller.editBrand)
 adminrouter.post("/editBrand/:id", auth.authMiddleware, brandcontroller.editedBrand)
 
+
 //order
 
-adminrouter.get("/order_list",auth.authMiddleware,ordercontroller.getorder)
+adminrouter.get("/orders",auth.authMiddleware,ordercontroller.getorder)
+adminrouter.get("/orders/details/:orderId",auth.authMiddleware,ordercontroller.orderdetails)
+adminrouter.put("/orders/updateOrderStatus/:orderId",auth.authMiddleware,ordercontroller.updateOrderStatus)
+adminrouter.put('/orders/acceptReturn/:orderId',auth.authMiddleware,ordercontroller.acceptReturn)
+adminrouter.put('/orders/cancelReturn/:orderId',auth.authMiddleware,ordercontroller.cancelReturn)
+
+
+
+//dash
+
+adminrouter.get('/count-orders-by-day', auth.authMiddleware, admincontroller.getcount)
+adminrouter.get('/count-orders-by-month', auth.authMiddleware, admincontroller.getcount)
+adminrouter.get('/count-orders-by-year', auth.authMiddleware, admincontroller.getcount)
+adminrouter.get('/latestOrders',auth.authMiddleware,admincontroller.lastorderandbeast)
+
+//sale report
+adminrouter.post('/download-sales-report',auth.authMiddleware,admincontroller.genereatesalesReport)
+
+
+//coupon 
+
+adminrouter.get('/couponManagement',auth.authMiddleware,couponController.couponget)
+adminrouter.post('/addCoupon',auth.authMiddleware,couponController.addcoupon)
+adminrouter.delete('/deleteCoupon/:couponId',auth.authMiddleware,couponController.deleteCoupon)
+adminrouter.get('/editCoupon/:couponId',auth.authMiddleware,couponController.editcouponget)
+adminrouter.post('/editCoupon/:couponId',auth.authMiddleware,couponController.editcouponpost)
 
 
 module.exports = adminrouter; 

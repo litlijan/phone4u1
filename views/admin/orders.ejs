@@ -37,6 +37,7 @@
                 <th scope="col">Status</th>
                 <th scope="col">Payment Method</th>
                 <th scope="col">Payment Status</th>
+                <th scope="col"></th>
                 <th scope="col">Actions</th>
               </tr>
             </thead>
@@ -86,7 +87,10 @@
                     <%= order[i].PaymentStatus %>
                   </td>
                   <td>
-                    <a href="/admin/order_list/details/<%= order[i]._id %>" class="btn btn-dark btn-sm">
+                
+                  </td>
+                  <td>
+                    <a href="/admin/orders/details/<%= order[i]._id %>" class="btn btn-dark btn-sm">
                       View Details
                     </a>
                   </td>

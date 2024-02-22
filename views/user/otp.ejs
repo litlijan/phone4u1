@@ -1,74 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <title>OTP Verification Form</title>
-    <link rel="stylesheet" href="/css/otpp.css" />
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-   <script src="script.js" defer></script>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <i class="bx bxs-check-shield"></i>
-      </header>
-      <% if(typeof message !== "undefined"){%>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OTP Verification Form</title>
+  <link rel="stylesheet" href="/css/otpp.css" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <i class="bx bxs-check-shield"></i>
+    </header>
+    <% if(typeof message !=="undefined" ){%>
       <div class="text-danger" style=" font-size: smaller;"><%-message%></div>
       <%}%>
-      <h4>Enter OTP Code</h4>
-      <form action="/postSignUp" method="post">
-        <div class="input-field">
-          <input name="otp1" type="number" />
-          <input name="otp2" type="number" disabled />
-          <input name="otp3" type="number" disabled />
-          <input name="otp4" type="number" disabled />
+        <h4>Enter OTP Code</h4>
+        <form action="/postSignUp" method="post">
+          <div class="input-field">
+            <input name="otp1" type="number" />
+            <input name="otp2" type="number" disabled />
+            <input name="otp3" type="number" disabled />
+            <input name="otp4" type="number" disabled />
+          </div>
+          <button>Verify OTP</button>
+        </form>
+        <div class="d-flex ">
+          <p class="text-danger">OTP will be expired in :
+          <p id="timer">00:30</p>
+          </p>
         </div>
-        <button>Verify OTP</button>
-      </form>
-      <div class="d-flex "> <p class="text-danger">OTP will be expired in : <p id="timer">00:30</p></p></div>
-    <!-- <div id="resendOtp" style="display: none;"><p class="mt-3">Didn't receive the email? <a href="/passwordResendOtp" class="card-link">Resend OTP</a></p></div> -->
-    <p class="text-center text-muted mt-4">
-      Didn't receive it?
-      <a href="/user/resendotp" class="text-decoration-none ms-2">
-        Resend code
-      </a>
-    </p>
-    </div>
-    <script > 
-let duration = 30; // Duration in seconds
-const timerDisplay = document.getElementById("timer");
-const resendOtp = document.getElementById("resendOtp");
-let countdown;
+        <!-- <div id="resendOtp" style="display: none;"><p class="mt-3">Didn't receive the email? <a href="/passwordResendOtp" class="card-link">Resend OTP</a></p></div> -->
+        <p class="text-center text-muted mt-4">
+          Didn't receive it?
+          <a href="/user/resendotp" class="text-decoration-none ms-2">
+            Resend code
+          </a>
+        </p>
+  </div>
+  <script>
+    console.log('333333333333333333333333333');
+    let duration = 30; // Duration in seconds
+    const timerDisplay = document.getElementById("timer");
+    const resendOtp = document.getElementById("resendOtp");
+    let countdown;
 
-function updateTimer() {
-    const minutes = Math.floor(duration / 60);
-    let seconds = duration % 60;
-    seconds = seconds < 10 ? "0" + seconds : seconds;
+    function updateTimer() {
+      const minutes = Math.floor(duration / 60);
+      let seconds = duration % 60;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
 
-    timerDisplay.textContent = `${minutes}:${seconds}`;
+      timerDisplay.textContent = `${minutes}:${seconds}`;
 
-    if (duration === 0) {
+      if (duration === 0) {
         clearInterval(countdown);
         timerDisplay.textContent = "00:00";
         resendOtp.style.display = "block";
-    } else {
+      } else {
         duration--;
+      }
     }
-}
 
-countdown = setInterval(updateTimer, 1000); // Update timer every second
+    countdown = setInterval(updateTimer, 1000); // Update timer every second
 
-      button = document.querySelector("button");
-      const inputs=document.querySelectorAll('input[type="number"]')
+    button = document.querySelector("button");
+    const inputs = document.querySelectorAll('input[type="number"]')
     inputs.forEach((input, index1) => {
       // alert('')
       input.addEventListener("keyup", (e) => {
         const currentInput = input,
           nextInput = input.nextElementSibling,
           prevInput = input.previousElementSibling;
-    
+
         if (currentInput.value.length > 1) {
           currentInput.value = "";
           return;
@@ -77,7 +84,7 @@ countdown = setInterval(updateTimer, 1000); // Update timer every second
           nextInput.removeAttribute("disabled");
           nextInput.focus();
         }
-    
+
         if (e.key === "Backspace") {
           inputs.forEach((input, index2) => {
             if (index1 <= index2 && prevInput) {
@@ -94,8 +101,9 @@ countdown = setInterval(updateTimer, 1000); // Update timer every second
         button.classList.remove("active");
       });
     });
-    
+
     window.addEventListener("load", () => inputs[0].focus());
-    </script>
-  </body>
+  </script>
+</body>
+
 </html>

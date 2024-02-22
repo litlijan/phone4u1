@@ -6,6 +6,7 @@ const admincontroller = require('../contoller/admincontroller');
 const cartcontroller=require('../contoller/cartcontroller')
 const otpcontroller = require('../contoller/otpcontroller');
 const usercontroller = require('../contoller/usercontroller');
+const orderController=require('../contoller/orderController')
 
 const userauths=require('../middleware/userauth')
 
@@ -29,46 +30,52 @@ router.get('/passwordResendOtp', usercontroller.PasswordResendOtp)
 
 
 
-router.post('/updateQuantity',cartcontroller.updatingQuantity)
+router.post('/updateQuantity',userauths.verifyUser,cartcontroller.updatingQuantity)
 
 // Handle OTP sending
 router.get('/sendotp', usercontroller.otpsender);
 
 router.post('/postSignUp', usercontroller.otpverify)
 
-router.get('/userProductDetails/:id', usercontroller.getUserProductDetails);
+router.get('/userProductDetails/:id',userauths.verifyUser,usercontroller.getUserProductDetails);
 
-router.get('/user/resendotp',usercontroller.resendOtp)
+router.get('/user/resendotp',userauths.verifyUser,usercontroller.resendOtp)
 
 //cart 
 
-router.get('/user/cart', cartcontroller.cart)
-router.post('/user/cart', cartcontroller.postcart)
-router.post('/addtocart', cartcontroller.getcart)
-router.get('/removefromcart/:_id',cartcontroller.removeFromCart)
-router.get('/user/checkout',cartcontroller.PlaceOrder)
+router.get('/user/cart',userauths.verifyUser, cartcontroller.cart)
+router.post('/user/cart',userauths.verifyUser, cartcontroller.postcart)
+router.post('/addtocart',userauths.verifyUser, cartcontroller.getcart)
+router.get('/removefromcart/:_id', userauths.verifyUser,cartcontroller.removeFromCart)
+router.get('/user/checkout',userauths.verifyUser,cartcontroller.PlaceOrder)
 // router.post('/user-make-purchase',cartcontroller.outofstock)
 
 //userprofile
 
-router.get('/userprofile',usercontroller.profiles)
-router.get('/address',usercontroller.address)
-router.post('/addaddress',usercontroller.addaddressProfile)
-router.delete('/deleteAddress/:addressId',usercontroller.deleteAddress)
-router.get('/edituserAddress/:addressId',usercontroller.edituserAddress)
-router.post('/edituserAddress/:addressId',usercontroller.updateediteduserAddress)
-router.post('/updateProfile',usercontroller.updateProfile)
-router.post('/userPasswordReset',usercontroller.userPasswordReset)
+router.get('/userprofile',userauths.verifyUser,usercontroller.profiles)
+router.get('/address',userauths.verifyUser,usercontroller.address)
+router.post('/addaddress',userauths.verifyUser,usercontroller.addaddressProfile)
+router.delete('/deleteAddress/:addressId',userauths.verifyUser,usercontroller.deleteAddress)
+router.get('/edituserAddress/:addressId',userauths.verifyUser,usercontroller.edituserAddress)
+router.post('/edituserAddress/:addressId',userauths.verifyUser,usercontroller.updateediteduserAddress)
+router.post('/updateProfile',userauths.verifyUser,usercontroller.updateProfile)
+router.post('/userPasswordReset',userauths.verifyUser,usercontroller.userPasswordReset)
 
 // order
 
-router.post('/addAddress-Checkout',usercontroller.orderAddress)
-router.post('/user/checkout',usercontroller.postOrderList)
-router.get('/ordersuccess',usercontroller.orderSuccess)
-router.get('/user/trackOrder',usercontroller.orderHistory)
-router.get('/cancelorder/:orderId',usercontroller.cancelOrder)
+router.post('/addAddress-Checkout',userauths.verifyUser,usercontroller.orderAddress)
+router.post('/user/checkout',userauths.verifyUser,usercontroller.postOrderList)
+router.get('/ordersuccess',userauths.verifyUser,usercontroller.orderSuccess)
+router.get('/user/trackOrder',userauths.verifyUser,usercontroller.orderHistory)
+router.get('/cancelorder/:orderId',userauths.verifyUser,usercontroller.cancelOrder)
+router.post('/verify-payment',userauths.verifyUser,orderController.verifyPayment)
+router.get('/orderLists',userauths.verifyUser,usercontroller.orderlists)
 
 
+//coupoun
+
+router.get('/coupoun',userauths.verifyUser,usercontroller.getcoupoun)
+router.get('/checkCoupon',userauths.verifyUser,usercontroller.postcoupoun)
 
 module.exports = router;
 

@@ -9,6 +9,7 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link href='https://fonts.googleapis.com/css?family=Italianno' rel='stylesheet'>
     <link rel="stylesheet" type="text/css" href="/css/admin/dashboard.css">
+    <link rel="stylesheet" href="/css/cropimage.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -43,11 +44,14 @@
                             </div>
                         </div>
                         <div class="col-10">
-                            <div class="col-12 d-flex justify-content-center" id="image">
-                                <img class="selected-image img-fluid" src="/uploads/<%= productToDisplay.images[0] %>"
-                                    style="width: auto; height: 450px;" alt="">
+                            <div class="col-12 d-flex justify-content-center">
+                                <img class="selected-image img-fluid" id="image" src="/uploads/<%= productToDisplay.images[0] %>" style="width: auto; height: 450px;" alt="">
                             </div>
-                        </div> 
+                            <button class="btn btn-dark" id="btn-crop">Crop</button>
+                            <div class="cropped-container" style="display: none;">
+                                <img src="" id="output">
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -128,6 +132,23 @@
                 });
             });
         </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const image = document.getElementById('image');
+        const cropper = new Cropper(image, {
+            aspectRatio: 0
+        });
+
+        document.querySelector('#btn-crop').addEventListener('click', function () {
+            var croppedImage = cropper.getCroppedCanvas().toDataURL('image/png');
+            document.getElementById('output').src = croppedImage;
+            document.querySelector('.cropped-container').style.display = 'flex';
+        });
+    });
+</script>
 
         
 </body>

@@ -14,4 +14,4 @@ const verifyUser = (req, res, next) => {
     }
   };
   
-module.exports = { verifyUser };
+module.exports = { verifyUser,userExist };

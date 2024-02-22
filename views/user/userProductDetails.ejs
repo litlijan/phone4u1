@@ -92,7 +92,15 @@
                                 </span>
                                 <% } %>
                     </p>
-                    <div class="btn btn-outline-dark me-3" onclick="addtocart('<%=displayProduct._id %>')">Add to Cart
+                    <div id="successAlert" style="display: none; background-color: #d4edda; color: #155724; padding: 10px; border: 1px solid #c3e6cb; border-radius: 5px;">
+                        <strong>Success!</strong> <span id="successMessage"></span>
+                      </div>
+                      
+                      <div id="errorAlert" style="display: none; background-color: #f8d7da; color: #721c24; padding: 10px; border: 1px solid #f5c6cb; border-radius: 5px;">
+                        <strong>Error!</strong> <span id="errorMessage"></span>
+                      </div>
+
+                    <div class="btn btn-outline-dark me-3" onclick="addtocart('<%=displayProduct._id %>')" >Add to Cart
                     </div>
 
 
@@ -103,8 +111,6 @@
 
         <script>
             async function addtocart(productid,id) {
-    alert("okkkkk");
-
     const url = '/addtocart/';
     try {
         const response = await fetch(url, {
@@ -116,27 +122,39 @@
          
         });
 
-        if (response.ok) {
-            const result = await response.json();
-         
-            alert('Added to cart successfully');
-            console.log(response,'response')
-            console.log(response.message,'mressage');
-            if(response.message){
-                alert(message  );
-                
-            }
-            // window.location.href='/user/cart'
-        } else {
-            // Handle other status codes if needed
-            alert('Failed to add to cart');
+         if (response.ok) {
+        const result = await response.json();
+        showSuccessAlert("Added to cart successfully");
+        console.log(response, 'response');
+        console.log(result.message, 'message');
+        if (result.message) {
+          showErrorAlert(result.message);
         }
+      } else {
+        showErrorAlert("Failed to add to cart. Please try again later.");
+      }
     } catch (error) {
-        // Handle any fetch-related errors
-        console.error('Error:', error);
-        alert('An error occurred while adding to cart');
+      console.error('Error:', error);
+      showErrorAlert("An error occurred. Please try again later.");
     }
 }
+
+function showSuccessAlert(message) {
+    var successAlert = document.getElementById("successAlert");
+    var successMessage = document.getElementById("successMessage");
+    
+    successMessage.innerText = message;
+  
+    successAlert.style.display = "block";
+    setTimeout(function() {
+      successAlert.style.display = "none";
+    }, 3000); 
+  }
+  
+  function showErrorAlert(message) {
+    var errorAlert = document.getElementById("errorAlert");
+ 
+  }
 
             $(document).ready(function () {
                 $(".thumbnail-image").click(function () {
@@ -158,66 +176,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
             integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-        <script>
-            // function buynow(itemid) {
-            //     const sizeElement = document.getElementById('size');
-            //     const colorElement = document.getElementById('color');
-            //     const selectedSize = sizeElement.value;
-            //     const selectedColor = colorElement.value;
-            //     const url = '/cart/buynowCheckout?pdid=' + itemid + '&size=' + selectedSize + '&color=' + selectedColor;
-
-            //     window.location.href = url;
-            // }
-            function addToCart(itemId) {
-                const sizeElement = document.getElementById('size');
-                const colorElement = document.getElementById('color');
-                const selectedSize = sizeElement.value;
-                const selectedColor = colorElement.value;
-                const url = '/add_to_cart';
-
-
-                const data = {
-                    key: itemId,
-                    size: selectedSize,
-                    color: selectedColor
-
-
-                };
-
-                const headers = {
-                    'Content-Type': 'application/json',
-                };
-
-
-                fetch(url, {
-                    method: 'POST',
-                    headers: headers,
-                    body: JSON.stringify(data),
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            const addtocart = document.getElementById('addtocart')
-                            const animation = document.getElementById('animation')
-                            setTimeout(() => {
-                                addtocart.textContent = "Add to cart"
-                                animation.style.display = "none"
-                            }, 2000)
-
-                            animation.style.display = "block"
-                            addtocart.textContent = "added "
-                            console.log('Item added to the cart.');
-                        } else {
-
-                            console.error('Error adding item to the cart.');
-                        }
-                    })
-                    .catch(error => {
-
-                        console.error('Network error:', error);
-                    });
-            }
-        </script>
 
 
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"

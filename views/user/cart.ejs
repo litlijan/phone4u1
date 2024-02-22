@@ -212,73 +212,15 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    // const makePurchase = document.querySelector('#makePurchase')
+
     const removeButtons = document.querySelectorAll(".remove-button");
     const applyCoupon = document.querySelectorAll(".applyCoupon")
     const decreaseButtons = document.querySelectorAll(".decrease-quantity");
     const increaseButtons = document.querySelectorAll(".increase-quantity");
 
-
-    // makePurchase.addEventListener('click',(event)=>{
-    //   event.preventDefault();
-    //   checkStock();
-    //   alert("hello")
-    // })
-
-    // async function checkStock(){
-    //   try {
-    //     alert("what")
-    //     const response = await fetch('/user/checkout',{  
-    //       method:'GET',
-    //       headers:{
-    //         'content-type':'application/json'
-    //         },
-    //     });
-    //     // if (response.ok) {
-    //     //   let data = await response.json()
-    //     //   console.log(data)
-    //     //   if(data.success){
-    //     //     console.log("inside success");
-    //     //     const cartSubmitForm = $('#cartSubmit'); 
-    //     //     console.log($('#cartSubmit').serialize());
-    //     //     $.ajax({
-    //     //       url: '/user/cart',
-    //     //       type: 'POST',
-    //     //       data: $('#cartSubmit').serialize(),
-    //     //       success: function (response) {
-    //     //         window.location.href = ('/user/checkout')
-    //     //         alert(response)
-    //     //         console.log('AJAX request was successful.');
-    //     //         console.log(response);
-    //     //       },
-    //     //       error: function (xhr, status, error) {
-    //     //         console.error('AJAX request failed with status:', status);
-    //     //       }
-    //     //     });
-    //     //   }else{
-    //     //     Swal.fire({
-    //     //       icon: 'error',
-    //     //       title: 'Insufficient Stock',
-    //     //       text: data.error,
-    //     //     });
-    //     //     data.itemsWithInsufficientStock.forEach(item => {
-    //     //     console.log("insidee insufficientstock");
-    //     //     const productId = item.productId; 
-    //     //     console.log(productId);
-    //     //     const outOfStockMessage = document.getElementById(`outOfStockMessage_${productId}`);
-    //     //     console.log(outOfStockMessage);
-    //     //     if (outOfStockMessage) {
-    //     //       outOfStockMessage.style.display = "block";
-    //     //       outOfStockMessage.textContent = `only ${item.availableQuantity} items in stock`;
-    //     //     }
-    //     //   });
-    //     //   }
-    //     // }
-    //   } catch (error) {
-    //     console.error("Error checking stock :", error);
-    //   }
-    // }
-
+    
+    
+    
 
     removeButtons.forEach((button) => {
       button.addEventListener("click", (event) => {
@@ -364,48 +306,50 @@
       }
     }
 
-    // async function checkCoupon(couponInput,subTotal){
-    //   try {
-    //     const response = await fetch('/checkCoupon',{
-    //       method: 'POST',
-    //       headers:{
-    //         'Content-Type': 'application/json'
-    //       },
-    //       body:JSON.stringify({code: couponInput, total: subTotal})
-    //     })
-    //     if(response.ok){
-    //       const data=await response.json()
-    //       if(data.success){
-    //         console.log("inside okkk");
-    //         console.log(data);
-    //         const discount = parseFloat(data.discount);
-    // const discountCell = document.getElementById('discountCell');
-    // if (discountCell) {
-    //     discountCell.textContent = discount.toFixed(2);
-    // }
-    //         const newTotal = parseFloat(subTotal) - discount;
-    //         const totalAmountCell = document.getElementById('totalAmountCell');
-    //         totalAmountCell.value = newTotal.toFixed(2);
-    //         Swal.fire('','Coupon Applied','success')
-    //       }else{
-    //       console.log("inside elseee");
-    //       Swal.fire(data.error)
-    //       console.log(error);
-    //       $('#flashMessage').text(data.error).show();
-    //     }
-    //     }
-    //   } catch (error) {
-    //     console.error('Error checking coupon:', error);
-    //   }
-    // }
+    async function checkCoupon(couponInput,subTotal){
+      console.log("pppppppppppppppppppppppppppppppppp");
+      try {
+        const response = await fetch('/checkCoupon',{
+          method: 'POST',
+          headers:{
+            'Content-Type': 'application/json'
+          },
+          body:JSON.stringify({code: couponInput, total: subTotal})
+        })
+        if(response.ok){
+          const data=await response.json()
+          if(data.success){
+            console.log("inside okkk");
+            console.log(data);
+            const discount = parseFloat(data.discount);
+    const discountCell = document.getElementById('discountCell');
+    if (discountCell) {
+        discountCell.textContent = discount.toFixed(2);
+    }
+            const newTotal = parseFloat(subTotal) - discount;
+            const totalAmountCell = document.getElementById('totalAmountCell');
+            totalAmountCell.value = newTotal.toFixed(2);
+            Swal.fire('','Coupon Applied','success')
+          }else{
+          console.log("inside elseee");
+          Swal.fire(data.error)
+          console.log(error);
+          $('#flashMessage').text(data.error).show();
+        }
+        }
+      } catch (error) {
+        console.error('Error checking coupon:', error);
+      }
+    }
 
-    // applyCoupon.forEach(element =>{
-    //   element.addEventListener("click",function(e){
-    //     const couponInput = document.querySelector('#coupon').value
-    //     const subTotal = document.getElementById("sub-total").textContent
-    //     checkCoupon(couponInput,subTotal);
-    //   })
-    // });
+    applyCoupon.forEach(element =>{
+      console.log("5555555555555555555555555555555555555");
+      element.addEventListener("click",function(e){
+        const couponInput = document.querySelector('#coupon').value
+        const subTotal = document.getElementById("sub-total").textContent
+        checkCoupon(couponInput,subTotal);
+      })
+    });
     
     
     decreaseButtons.forEach((button) => {
@@ -456,6 +400,8 @@
 
     updateTotalAmount();
   });
+
+  
 </script>
 
 

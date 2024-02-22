@@ -51,7 +51,7 @@ padding-top: 15px;
 <body>
     <%-include('./partials/user-nav') %>
 
-
+    
   <div class="container">
     <div class="row">
       <% if (orders.length === 0) { %>
@@ -115,7 +115,7 @@ padding-top: 15px;
                       <% } %>
                   </p>
                   
-                    <p class="card-text">Total Price :<span class="blue-text"><b><%= order.TotalPrice %> Rs only</b></span></p>
+                    <p class="card-text">Total Price :<span class="blue-text"><b><%= total %> Rs only</b></span></p>
                     <p class="card-text">Order Status:<b> <%= order.Status %></b></p>
                     <p class="card-text">Payment Method: <%= order.PaymentMethod %></p>
                    
@@ -130,6 +130,10 @@ padding-top: 15px;
                     <button type="button" class="btn btn-dark m-2">
                         <a href="/user/userdashboard" style="text-decoration: none; color: rgb(255, 255, 255);">View Product</a>
                           </button>
+
+                          <!-- <button type="button" class="btn btn-dark m-2">
+                            <a href="/orderLists" style="text-decoration: none; color: rgb(255, 255, 255);">Order list</a>
+                          </button> -->
                     <br>
                     <p class="lead fw-bold mb-4 pb-2" style="color: #f37a27;">Tracking Order</p>
                     <div class="row">
@@ -283,45 +287,8 @@ console.log(returnReason);
   }
 
 
-  async function generateAndDownloadInvoice(orderId) {
-    let timerInterval
-Swal.fire({
-  title: 'Download Started!',
-  html: 'I will close in <b></b> milliseconds.',
-  timer: 4000,
-  timerProgressBar: true,
-  didOpen: () => {
-    Swal.showLoading()
-    const b = Swal.getHtmlContainer().querySelector('b')
-    timerInterval = setInterval(() => {
-      b.textContent = Swal.getTimerLeft()
-    }, 100)
-  },
-  willClose: () => {
-    clearInterval(timerInterval)
-  }
-}).then((result) => {
-  if (result.dismiss === Swal.DismissReason.timer) {
-    console.log('I was closed by the timer')
-  }
-})
-
-      try {
-          const response = await fetch('/downloadinvoice', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json', 
-              },
-              body: JSON.stringify({ orderId }) 
-          });
-          if (response.ok) {
-            
-              window.location.href = `/downloadinvoice/${orderId}`;
-          }
-      } catch (error) {
-          console.error('Error in downloading the invoice:', error);
-      }
-  }
+  
+  
   </script>
   
   

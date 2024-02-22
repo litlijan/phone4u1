@@ -149,7 +149,7 @@
       </div>
       
       <div class="col-md-5">
-        <!-- Inside the "Payment Methods" card -->
+      
 <div class="card">
   <div class="card-body">
     <p class="mb-2">Total price: <%= total %></p>
@@ -178,7 +178,7 @@
               value="online"
           />
           <label class="form-check-label" for="online">
-              Online Payment
+              Online Payment 
           </label>
       </div>
       
@@ -316,9 +316,9 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script>
-  console.log("222222222222222222");
+
   $("#form-checkout").submit((e) => {
-    console.log('333333333333333333333');
+    
     e.preventDefault()
     const selectedAddress = $("input[name='Address']:checked").val();
     if (!selectedAddress) {
@@ -330,35 +330,19 @@
         });
         return
       }
-      // const walletAmount = $("input[name='paymentMethod']:checked").val()
-      // if(walletAmount === "wallet"){
-      //   const labelElement = document.querySelector('label[for="wallet"]');
-      //   const walletAmountValue = parseInt(labelElement.getAttribute('data-walletAmount'));
-      //   const totalAmount = parseInt(labelElement.getAttribute('id'));
-      //   console.log('hii');
-      //   console.log(totalAmount);
-      //   console.log(walletAmountValue);
-      //   if(walletAmountValue < totalAmount){
-      //     console.log("inside if");
-      //     Swal.fire({
-      //       icon: "error",
-      //       title: "Insufficient Wallet Balance",
-      //       text: "Your wallet balance is not sufficient for this transaction.",
-      //   });
-      //   return;
-      //   }
-      // }
-          console.log("222222222222222222");
-    $.ajax({ 
-      url:'/user/checkout',
-      method: 'post',
-      data: $('#form-checkout').serialize(),
-      success: (response) => {
-        if (response.codSuccess) {
-          
-          window.location = '/ordersuccess'
-          
-        } else if(response.online) {
+     
+      
+      $.ajax({ 
+        url:'/user/checkout',
+        method: 'post',
+         data: $('#form-checkout').serialize() + '&total=' + '<%= total %>',
+        success: (response) => {
+          if (response.codSuccess) {
+     
+            window.location = '/ordersuccess'
+            
+          } else if(response.online) {
+            // alert("payment raa")
           handlePayNowClick(response)
         }else if(response.wallet){
           window.location = '/ordersuccess'
@@ -373,11 +357,12 @@
 
   })
   function handlePayNowClick (order) {
+    console.log('pppppppppppppppppppppppppp');
     var options = {
-    "key": "rzp_test_2kq1q9uS7VLUsv",
+    "key": "rzp_test_nz16kmykXJ1LF3",
     "amount": order.createdOrder.amount, 
     "currency": "INR",
-    "name": "TICKER",
+    "name": "phone4u",
     "description": "Test Transaction",
     "image": "https://example.com/your_logo",
     "order_id": order.createdOrder.id, 
@@ -385,19 +370,20 @@
         verifyPayment(response, order)
     },
     "prefill": {
-        "user": order.order.UserId,
+      "user": order.order.UserId,
     },
     "notes": {
-        "address": "Razorpay Corporate Office"
+      "address": "Razorpay Corporate Office"
     },
     "theme": {
-        "color": "#3399cc"
+      "color": "#3399cc"
     }
   };
+  console.log(options,"55555555555555555555555555555555555555")
   var rzp1 = new Razorpay(options);
   rzp1.open();
   }
-
+ console.log('ooooooooooooooooooooooooo');
   function verifyPayment (payment, order) {
     console.log('now in verifyPayment')
     $.ajax({

@@ -6,7 +6,7 @@ const { Schema, ObjectId } = mongoose;
 
 const ShippedAddressSchema = new Schema({
   Name: { type: String, required: true },
-  Address: { type: String, required: true },
+  Address: { type: String,},   
   Pincode: { type: String, required: true },
   City: { type: String, required: true },
   State: { type: String, required: true },

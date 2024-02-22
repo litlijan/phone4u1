@@ -28,6 +28,7 @@ module.exports = {
     },
     getBrand: async (req, res) => {
 
+      try {
         const page = parseInt(req.query.page) || 1; 
         const perPage = 5; 
         const skip = (page - 1) * perPage;
@@ -42,23 +43,38 @@ module.exports = {
             totalCount,
             totalPages: Math.ceil(totalCount / perPage),
         });
+      } catch (error) {
+        console.log(error);
+      }
     },
     deleteBrand: async (req, res) => {
-        const { id } = req.params
+        try {
+            const { id } = req.params
         const delBrand = await brand.findOneAndDelete({ _id: id })
         res.redirect("/admin/brand")
+        } catch (error) {
+            console.log(error);
+        }
     },
     editBrand: async (req, res) => {
+       try {
         const { id } = req.params
         const editBrand = await brand.findById({ _id: id })
         res.render("./admin/editBrand", { editBrand })
+       } catch (error) {
+        console.log(error);
+       }
     },
     editedBrand: async (req, res) => {
+       try {
         const { id } = req.params
         console.log(id)
         const { name } = req.body
         const brandUpdate = await brand.findByIdAndUpdate({ _id: id }, { name: name })
         res.redirect("/admin/brand",)
+       } catch (error) {
+        console.log(error);
+       }
     }
 
 

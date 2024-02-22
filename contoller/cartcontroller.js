@@ -48,31 +48,8 @@ const getcart = async (req, res) => {
   }
 };
 
-
-
-const postcart = async (req, res) => {
-  try {
-
-    console.log(req.body,"ggggggggggggggggggggggggggggggggggggggggggggggg");
-    const UserId = req.session.email;
-    req.session.totalPrice = parseInt(req.body.totalPrice);
-    res.locals.totalPrice=res.session.totalPrice
-    console.log(locals.totalPrice,"totoalllllllllll");
-    const cart = await Cart.findOneAndUpdate(
-      { UserId: UserId.trim() },
-      { $set: { TotalAmount: req.session.totalPrice } },
-      { new: true }
-    );
-    console.log("reached here", req.session.totalPrice, cart);
-
-    res.json({ success: true});
-
-  } catch (err) {
-    console.log('err')
-  }
-}
-
 const cart = async (req, res) => {
+  
   try {
 
     const userEamail = req.session.email;
@@ -144,10 +121,32 @@ const updatingQuantity = async (req, res) => {
   }
 }
 
+const postcart = async (req, res) => {
+  try {
+
+    console.log("ggggggggggggggggggggggggggggggggggggggggggggggg");
+    const UserId = req.session.email;
+    req.session.totalPrice = parseInt(req.body.totalPrice);
+    res.locals.totalPrice=res.session.totalPrice
+    console.log(locals.totalPrice,"totoalllllllllll");
+    const cart = await Cart.findOneAndUpdate(
+      { UserId: UserId.trim() },
+      { $set: { TotalAmount: req.session.totalPrice } },
+      { new: true }
+    );
+    console.log("reached here", req.session.totalPrice, cart);
+
+    res.json({ success: true});
+
+  } catch (err) {
+    console.log('err')
+  }
+}
 
 const PlaceOrder = async (req, res) => {
+try {
   const total=req.query.data;
-  console.log(total,'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+  console.log(total,'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<111111111111111');
   const userId = req.session.email;
   const users = await user.findOne({email:userId});
   const cart = await Cart.findOne({ UserId: users}).populate(
@@ -157,22 +156,21 @@ const PlaceOrder = async (req, res) => {
     res.redirect("/cart");
   
   } else {
-    res.render("user/checkout", { users,cart, total});
+    res.render("user/checkout", { users,cart,total});
   }
+} catch (error) {
+  console.log(error);
+}
 };
 
-// const outofstock=(req,res)=>{
- 
-// console.log(req.query.data,"hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-// console.log(req.query,"hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-// }
+
 
 module.exports = {
   cart,
   getcart,
-  postcart,
   removeFromCart,
   updatingQuantity,
   PlaceOrder,
-  // outofstock,
+  postcart,
+  
 }
