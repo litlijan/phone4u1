@@ -29,48 +29,63 @@
           </div>
           <button>Verify OTP</button>
         </form>
-        <div class="d-flex ">
-          <p class="text-danger">OTP will be expired in :
-          <p id="timer">00:30</p>
+        <div class="d-flex">
+          <p class="text-danger">OTP will be expired in:
+              <p id="timer">00:30</p>
           </p>
-        </div>
-        <!-- <div id="resendOtp" style="display: none;"><p class="mt-3">Didn't receive the email? <a href="/passwordResendOtp" class="card-link">Resend OTP</a></p></div> -->
-        <p class="text-center text-muted mt-4">
+      </div>
+      
+      <p id="resendSection" class="text-center text-muted mt-4" style="display: none;">
           Didn't receive it?
-          <a href="/user/resendotp" class="text-decoration-none ms-2">
-            Resend code
+          <a href="/resendotp" id="resendLink" class="text-decoration-none ms-2">
+              Resend code
           </a>
-        </p>
+      </p>
   </div>
-  <script>
-    console.log('333333333333333333333333333');
-    let duration = 30; // Duration in seconds
-    const timerDisplay = document.getElementById("timer");
-    const resendOtp = document.getElementById("resendOtp");
-    let countdown;
+     <script>
+            let duration = 30;
+            const timerDisplay = document.getElementById("timer");
+            const resendSection = document.getElementById("resendSection");
+            const resendLink = document.getElementById("resendLink");
+            let countdown;
+        
+            function updateTimer() {
+                const minutes = Math.floor(duration / 60);
+                let seconds = duration % 60;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+        
+                timerDisplay.textContent = `${minutes}:${seconds}`;
+        
+                if (duration === 0) {
+                    clearInterval(countdown);
+                    timerDisplay.textContent = "00:00";
+                    // Enable the resend link when timer reaches 0
+                    resendSection.style.display = "block";
+                } else {
+                    duration--;
+                    // Disable the resend link while the timer is running
+                    resendSection.style.display = "none";
+                }
+            }
+        
+            countdown = setInterval(updateTimer, 1000);
+        
+            resendLink.addEventListener("click", function(event) {
 
-    function updateTimer() {
-      const minutes = Math.floor(duration / 60);
-      let seconds = duration % 60;
-      seconds = seconds < 10 ? "0" + seconds : seconds;
-
-      timerDisplay.textContent = `${minutes}:${seconds}`;
-
-      if (duration === 0) {
-        clearInterval(countdown);
-        timerDisplay.textContent = "00:00";
-        resendOtp.style.display = "block";
-      } else {
-        duration--;
-      }
-    }
-
-    countdown = setInterval(updateTimer, 1000); // Update timer every second
-
-    button = document.querySelector("button");
+                event.preventDefault();
+                clearInterval(countdown);
+                duration = 30;
+                countdown = setInterval(updateTimer, 1000);
+                location.href='/resendotp'
+            });
+        
+            window.addEventListener("load", () => {
+                updateTimer();
+            });
+            button = document.querySelector("button");
     const inputs = document.querySelectorAll('input[type="number"]')
     inputs.forEach((input, index1) => {
-      // alert('')
+      
       input.addEventListener("keyup", (e) => {
         const currentInput = input,
           nextInput = input.nextElementSibling,
@@ -103,7 +118,7 @@
     });
 
     window.addEventListener("load", () => inputs[0].focus());
-  </script>
+        </script>
 </body>
 
 </html>

@@ -7,6 +7,8 @@ const auth = require('../middleware/adminauth');
 const brandcontroller = require('../contoller/brandcontroller');
 const ordercontroller =require('../contoller/orderController');
 const couponController =require('../contoller/couponController')
+const uploadBanner=require('../middleware/bannerMulter')
+
 
 
 
@@ -16,10 +18,8 @@ adminrouter.get('/', admincontroller.toadmin);
 adminrouter.post('/', admincontroller.admin)
 adminrouter.get('/admindashboard', auth.authMiddleware, admincontroller.toadmindashboard)
 adminrouter.get('/mangeuser', auth.authMiddleware, admincontroller.usermanagement)
-// router.get('/usermangerment',admincontroller.touserlist)
 adminrouter.post('/block/:userId', auth.authMiddleware, admincontroller.BlockandUnblock)
 adminrouter.post('/unblock/:userId', auth.authMiddleware, admincontroller.unBlock)
-// router.get('/addcategory',admincontroller.addcategory)
 adminrouter.post('/addcategory', auth.authMiddleware, admincontroller.postaddcategory)
 adminrouter.get('/addcategory', auth.authMiddleware, admincontroller.addcategory)
 adminrouter.get('/editCategory/:id', auth.authMiddleware, admincontroller.editCategory)
@@ -27,7 +27,6 @@ adminrouter.post('/editCategory/:id', auth.authMiddleware, admincontroller.edite
 adminrouter.post('/disable/:userId', auth.authMiddleware, admincontroller.disableandenable)
 adminrouter.post('/enable/:userId', auth.authMiddleware, admincontroller.enable)
 adminrouter.get('/category', auth.authMiddleware, admincontroller.tocategory)
-// adminrouter.get('/product',admincontroller.toproduct)
 
 
 //product
@@ -78,7 +77,13 @@ adminrouter.get('/couponManagement',auth.authMiddleware,couponController.coupong
 adminrouter.post('/addCoupon',auth.authMiddleware,couponController.addcoupon)
 adminrouter.delete('/deleteCoupon/:couponId',auth.authMiddleware,couponController.deleteCoupon)
 adminrouter.get('/editCoupon/:couponId',auth.authMiddleware,couponController.editcouponget)
-adminrouter.post('/editCoupon/:couponId',auth.authMiddleware,couponController.editcouponpost)
+adminrouter.post('/edit-coupon/:couponId',auth.authMiddleware,couponController.editcouponpost)
+
+//banner mangement
+
+adminrouter.get('/bannerManagement', auth.authMiddleware, admincontroller.bannerManagement)
+adminrouter.post('/uploadBanner', auth.authMiddleware, uploadBanner.single('image'),admincontroller.bannerManagementpost)
+adminrouter.get('/deleteBanner/:bannerId', auth.authMiddleware, admincontroller.deletebannerManagement)
 
 
 module.exports = adminrouter; 

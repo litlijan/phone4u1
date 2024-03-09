@@ -34,7 +34,7 @@
     <table>
         <thead>
             <tr>
-                <th>User ID</th>
+                
                 <th>Order ID</th>
                 <th>Date</th>
                 <th>Total Amount</th>
@@ -42,23 +42,15 @@
             </tr>
         </thead>
         <tbody>
-            <% orders.forEach(order => { %>
+            <% newArray.forEach(order => { %>
                 <tr>
-                    <td><%= order.UserId %></td>
-                    <td><%= order._id %></td>
-                    <td><%= order.OrderedDate %></td>
-                    <td><%= order.total.toFixed(2) %></td>
+                    <td><%= order.OrderId %></td>
+                    <td><%= order.OrderDate %></td>
+                    <td><%= order.totalOrderPrice %></td>
                     <td><%= order.PaymentMethod %></td>
                 </tr>
             <% }); %>
         </tbody>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td style="font-weight: 600;">Total Sales : </td>
-            <td>₹  <%= totalSales %></td>
-        </tr>
     </table>
 </body>
 </html>

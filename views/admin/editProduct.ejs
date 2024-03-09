@@ -131,18 +131,18 @@
         });
     </script>
 <script>
-    console.log("5555555555555555555555555")
+    
     function deleteImage(index, inputId) {
         const productId = document.getElementById("data")
-      console.log('Product ID:', productId);
+      
       const productIdvalue=productId.getAttribute('data-value')
-      console.log(productIdvalue,'999999999999999999999999999');
+      
       fetch(`/admin/delete-image/${productIdvalue}/${index}`, {
   method: 'DELETE'
 })
 .then(response => {
-    console.log('..................................')
-    console.log(response)
+    
+    
         if (response.ok) {
             location.reload()
           Swal.fire({
@@ -184,10 +184,10 @@
         
                 if (name.trim() === '' || description.trim() === '' || tags.trim() === '' || price.trim() === '' || discount.trim() === '' || brand.trim() === '' || category.trim() === '' || stock.trim() === '') {
                     showCustomAlert();
-                    return false; // Prevent form submission
+                    return false; 
                 }
         
-                return true; // Allow form submission
+                return true; 
             }
         
             function showCustomAlert() {

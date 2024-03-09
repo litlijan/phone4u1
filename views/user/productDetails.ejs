@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HomePage</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Italianno' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="/css/admin/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/js-image-zoom@0.4.1/js-image-zoom.js" type="application/javascript"></script>
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/images/phone4u.png" alt="phone4u" width="30" height="30" class="d-inline-block align-top">
+                <span class="navbar-brand-text fw-bold fs-4">phone4u</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/user/userdashboard">Home</a>
+                    </li>
+    
+                    <li class="nav-item">
+                        <a class="nav-link" href="/aboutUs">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/login">login</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <a href="/user/cart" class="nav-link me-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
+                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                        </svg>
+                    </a>
+                    <a href="/userprofile" class="nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z" />
+                        </svg>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </nav>
+
+        <div class="container">
+
+            <div class="row d-flex justify-content-center">
+
+                <div class="col-md-6  py-5 my-5">
+                    <div class="row">
+
+                        <div class="col-2">
+                            <div class="col-12 my-1" id=".thumbnail-image">
+                                <img class="thumbnail-image" src="/uploads/<%=displayProduct.images[0]%>"
+                                    style="width: 100px; height: 100px;" alt="">
+                            </div>
+                            <div class="col-12 my-1" id=".thumbnail-image">
+                                <img class="thumbnail-image" src="/uploads/<%=displayProduct.images[1]%>"
+                                    style="width: 100px; height: 100px;" alt="">
+                            </div>
+                            <div class="col-12 my-1" id=".thumbnail-image">
+                                <img class="thumbnail-image" src="/uploads/<%=displayProduct.images[2]%>"
+                                    style="width: 100px; height: 100px;" alt="">
+                            </div>
+                            <div class="col-12 my-1" id=".selected-image">
+                                <img class="thumbnail-image" src="/uploads/<%=displayProduct.images[3]%>"
+                                    style="width: 100px; height: 100px;" alt="">
+                            </div>
+                        </div>
+                        <div class="col-10">
+                            <div class="col-12 d-flex justify-content-center" id="lijan">
+                                <img class="selected-image img-fluid" src="/uploads/<%=displayProduct.images[0]%>"
+                                    style="width: auto; height: 450px;" alt="">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="col-md-6 py-5 my-5">
+
+                    <p class="fw-bold fs-3">
+                        <%= displayProduct.name%>
+                    </p>
+
+                    <p class="text-secondary small">
+                        <%= displayProduct.description%>
+                    </p>
+
+                    <p class="text-secondary ">Category: <%= displayProduct.category.name%>
+                    </p>
+
+                    <p class="text-secondary ">Brand: <%= displayProduct.brand.name%>
+                    </p>
+
+                    <p class="text-secondary">Actual Price: <span class="fw-bold text-dark"><del>₹<%=
+                                    displayProduct.price%></del></span></p>
+
+                    <p class="text-secondary">Offer Price: <span class="fw-bold text-success">₹<%=
+                                displayProduct.price-displayProduct.discount%></span></p>
+
+                    <p class="text-secondary "> Stock: <%= displayProduct.stock%>
+                    </p>
+
+                    <p class="text-secondary "> Status:
+                        <% if (displayProduct.stock> 0 ) { %>
+                            <span class="text-success fw-bold">
+                                <%= displayProduct.status %>
+                            </span>
+
+                            <% }else { %>
+                                <span class="text-danger fw-bold">
+                                    <%= displayProduct.status %>
+                                </span>
+                                <% } %>
+                    </p>
+                    <div id="successAlert" style="display: none; background-color: #d4edda; color: #155724; padding: 10px; border: 1px solid #c3e6cb; border-radius: 5px;">
+                        <strong>Success!</strong> <span id="successMessage"></span>
+                      </div>
+                      
+                      <div id="errorAlert" style="display: none; background-color: #f8d7da; color: #721c24; padding: 10px; border: 1px solid #f5c6cb; border-radius: 5px;">
+                        <strong>Error!</strong> <span id="errorMessage"></span>
+                      </div>
+
+                    <div class="btn btn-outline-dark me-3" id="addToCartBtn">Add to Cart
+                    </div>
+                   
+
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+             function showAlert() {
+        alert("user not login");
+    }
+
+    // Add event listener to the button
+    document.getElementById("addToCartBtn").addEventListener("click", function() {
+        showAlert();
+    });
+
+            $(document).ready(function () {
+                $(".thumbnail-image").click(function () {
+                    var newImageSrc = $(this).attr("src");
+                    $(".selected-image").attr("src", newImageSrc);
+                });
+            });
+        </script>
+        <script>
+            var options = {
+                width: 300,
+                height: 500,
+                zoomWidth: 150,
+                offset: { vertical: 0, horizontal: 10 }
+            };
+
+            new ImageZoom(document.getElementById("lijan"), options);
+        </script>
+ 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+</body>
+
+</html>

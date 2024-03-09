@@ -49,13 +49,12 @@
                     id="count_<%= cartItem.ProductId._id %>"
                     value="<%= cartItem.Quantity %>"
                     data-min-value="1"
-                    data-available-quantity="<%= cartItem.ProductId.AvailableQuantity%>"
+                    data-available-quantity="<%= cartItem.ProductId.stock%>"
                     />
                     <div class="input-group-append">
                       <button
                         class="btn btn-dark increase-quantity"
                         data-product-id="<%=cartItem.ProductId._id%>"
-                        <% console.log(cartItem.ProductId._id)%>
                         type="button"
                       >
                         +
@@ -91,17 +90,12 @@
                 >
                   only <%= cartItem.ProductId.AvailableQuantity%> items in stock
                 </strong>
-                    <!-- <a
-                      href="#!"
-                      class="btn btn-light border px-2 icon-hover-primary"
-                      ><i class="fas fa-heart fa-lg px-1 text-secondary"></i
-                    ></a> -->
+                   
                     <a
                       href="/removefromcart/<%=cartItem.ProductId._id%>"
                       class="btn btn-light border text-danger icon-hover-danger remove-button"
                     >
-                      Remove</a
-                    >
+                      Remove</a>
                   </div>
                 </div>
               </div>
@@ -146,10 +140,10 @@
                 <p class="mb-2">Sub Total :</p>
                 <div id="sub-total"></div>
               </div>
-              <!-- <div class="d-flex justify-content-between">
+              <div class="d-flex justify-content-between">
                <p class="mb-2">Discount: </p>
                  <div id="discountCell"></div>
-               </div> -->
+               </div>
                 
               <div class="d-flex justify-content-between">
                 <p class="mb-2">TAX:</p>
@@ -217,7 +211,7 @@
     const applyCoupon = document.querySelectorAll(".applyCoupon")
     const decreaseButtons = document.querySelectorAll(".decrease-quantity");
     const increaseButtons = document.querySelectorAll(".increase-quantity");
-
+    
     
     
     
@@ -240,7 +234,7 @@
         });
       });
     });
-
+   
     function updateTotalAmount() {
       let totalAmount = 0;
 
@@ -264,15 +258,14 @@
 
       const totalAmountCell = document.getElementById("totalAmountCell");
       const subTotal = document.getElementById("sub-total");
-      totalAmountCell.value = `${totalAmount.toFixed(2)}`;
-      subTotal.textContent = `${totalAmount.toFixed(2)}`;
-      const hiddenTotalAmount = document.getElementById('hiddenTotalAmount');
-      hiddenTotalAmount.value = totalAmount.toFixed(2);
+      totalAmountCell.value = `${totalAmount}`;
+      subTotal.textContent = `${totalAmount}`;
+    
     }
 
     async function updateQuantity(productId, change) {
       try {
-        console.log(productId,'+++++++++++++++++++++++++++++++')
+
         const response = await fetch("/updateQuantity", {
           method: "POST",
           headers: {
@@ -283,7 +276,7 @@
 
         if (response.ok) {
           const data = await response.json();
-          console.log("Received new quantity from server:", data.newQuantity);
+
 
           const quantityInput = document.getElementById(`count_${productId}`);
           const productAmount = document.getElementById(
@@ -295,7 +288,7 @@
             quantityInput.value = data.newQuantity;
             productAmount.textContent = existingValue * data.newQuantity;
 
-            // Calculate and update the total amount
+            
             updateTotalAmount();
           }
         } else {
@@ -306,51 +299,50 @@
       }
     }
 
-    async function checkCoupon(couponInput,subTotal){
-      console.log("pppppppppppppppppppppppppppppppppp");
-      try {
-        const response = await fetch('/checkCoupon',{
-          method: 'POST',
-          headers:{
-            'Content-Type': 'application/json'
-          },
-          body:JSON.stringify({code: couponInput, total: subTotal})
-        })
-        if(response.ok){
-          const data=await response.json()
-          if(data.success){
-            console.log("inside okkk");
-            console.log(data);
-            const discount = parseFloat(data.discount);
-    const discountCell = document.getElementById('discountCell');
-    if (discountCell) {
-        discountCell.textContent = discount.toFixed(2);
-    }
-            const newTotal = parseFloat(subTotal) - discount;
-            const totalAmountCell = document.getElementById('totalAmountCell');
-            totalAmountCell.value = newTotal.toFixed(2);
-            Swal.fire('','Coupon Applied','success')
-          }else{
-          console.log("inside elseee");
-          Swal.fire(data.error)
-          console.log(error);
-          $('#flashMessage').text(data.error).show();
+    async function checkCoupon(couponInput, subTotal) {
+    try {
+        const response = await fetch('/checkCoupon', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ code: couponInput, total: subTotal })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            if (data.success) {
+                const discount = data.discount;
+                const discountCell = document.getElementById('discountCell');
+                if (discountCell) {
+                    discountCell.textContent = discount;
+                    const newTotal = subTotal - discount;
+                    const totalAmountCell = document.getElementById('totalAmountCell');
+                    totalAmountCell.value = newTotal;
+                    Swal.fire('', 'Coupon Applied', 'success');
+                } else {
+                    console.error("Element with id 'discountCell' not found.");
+                }
+            } else {
+                Swal.fire(data.error);
+                console.error(data.error);
+                $('#flashMessage').text(data.error).show();
+            }
         }
-        }
-      } catch (error) {
+    } catch (error) {
         console.error('Error checking coupon:', error);
-      }
     }
+}
+
 
     applyCoupon.forEach(element =>{
-      console.log("5555555555555555555555555555555555555");
       element.addEventListener("click",function(e){
         const couponInput = document.querySelector('#coupon').value
         const subTotal = document.getElementById("sub-total").textContent
         checkCoupon(couponInput,subTotal);
       })
-    });
-    
+    })
+
     
     decreaseButtons.forEach((button) => {
       button.addEventListener("click", () => {
@@ -359,7 +351,9 @@
    
         const quantity = parseInt(quantityInput.value, 10);
         
+        
         const availableQuantity =button.getAttribute("data-available-quantity");
+        
       
         
         if (quantity === 1) {
@@ -378,13 +372,16 @@
        
         const productId = button.getAttribute("data-product-id");
 
-        console.log(productId,'ppppppppppppppppppppppppp')
-        const quantityInput = document.getElementById(`count_${productId}`);
-        console.log(quantityInput,'111111111111111111111111111111111111111111')
-        const quantity = parseInt(quantityInput.value, 10);
-        console.log('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
-        const availableQuantity = parseInt(quantityInput.getAttribute("data-available-quantity"), 10);
         
+        const quantityInput = document.getElementById(`count_${productId}`);
+        
+        const quantity = quantityInput.value
+        
+        
+        const availableQuantityString = quantityInput.getAttribute("data-available-quantity");
+const availableQuantity = Number(availableQuantityString)
+
+
 
 
         if (quantity >= availableQuantity) {

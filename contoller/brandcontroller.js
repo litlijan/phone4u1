@@ -7,7 +7,7 @@ module.exports = {
     getAddBrand: (req, res) => {
 
         res.render("./admin/addBrand", { messages: req.flash() })
-        console.log('..........................this is getAddBrand......')
+        
     },
     addBrand: async (req, res) => {
 
@@ -15,7 +15,7 @@ module.exports = {
             const name = req.body.name;
             const brands = await brand.findOne({ name: name })
             if (brands) {
-                console.log("Brand already in the db")
+
                 req.flash("error", "Brand already exists")
                 res.redirect("/admin/addBrand")
             } else {
@@ -34,7 +34,6 @@ module.exports = {
         const skip = (page - 1) * perPage;
         const brands = await brand.find({}).sort({ name: 1 }).skip(skip).limit(perPage);
         const totalCount = await brand.countDocuments();
-        console.log('........................');
         res.render("./admin/brand", {
             brands,
 

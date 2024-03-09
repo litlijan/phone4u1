@@ -42,7 +42,7 @@
                             <div class="col-12 my-1" id=".selected-image">
                                 <img class="thumbnail-image" src="/uploads/<%=displayProduct.images[3]%>"
                                     style="width: 100px; height: 100px;" alt="">
-                            </div>
+                            </div> 
                         </div>
                         <div class="col-10">
                             <div class="col-12 d-flex justify-content-center" id="lijan">
@@ -102,7 +102,7 @@
 
                     <div class="btn btn-outline-dark me-3" onclick="addtocart('<%=displayProduct._id %>')" >Add to Cart
                     </div>
-
+                   
 
                 </div>
             </div>
@@ -110,6 +110,9 @@
 
 
         <script>
+           
+
+
             async function addtocart(productid,id) {
     const url = '/addtocart/';
     try {
@@ -173,6 +176,48 @@ function showSuccessAlert(message) {
 
             new ImageZoom(document.getElementById("lijan"), options);
         </script>
+         <script>
+           document.querySelectorAll('.add-to-wishlist-button').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+
+
+                const productId = this.getAttribute('data-product-id');
+                const icon = this.querySelector('.fa-heart');
+
+                $.ajax({
+                    url: '/wishlist/',
+                    method: 'POST',
+                    data: {
+                        productId: productId,
+                    },
+                    success: function (response) {
+                        console.log(icon.style.color)
+                        if (response.added) {
+                            Swal.fire({
+                                position: 'top',
+                                icon: 'success',
+                                title: 'Added to Wishliist',
+                                showConfirmButton: false,
+                                timer: 1500,
+                                customClass: {
+                                    popup: 'small-alert',
+                                }
+                            })
+                            icon.classList.add('text-danger')
+
+                        } else {
+                            icon.classList.remove('text-danger')
+                        }
+                    },
+                    error: function (error) {
+                        console.error('Error updating wishlist:', error);
+                    }
+                });
+            });
+        });
+
+         </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
             integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>

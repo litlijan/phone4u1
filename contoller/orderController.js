@@ -2,7 +2,11 @@ const User = require('../model/user')
 const product = require('../model/product')
 const brand = require('../model/brandSchema')
 const category = require('../model/category')
+const crypto = require('crypto');
 const Order=require('../model/order')
+const mongoose=require('mongoose')
+const { v4: uuidv4 } = require('uuid');
+
 
 const getorder=async(req,res)=>{
    try {
@@ -11,7 +15,7 @@ const getorder=async(req,res)=>{
     const skip = (page - 1) * perPage;
     const order = await Order.find({}).sort({ name: 1 }).skip(skip).limit(perPage);
     const totalCount = await Order.countDocuments();
-    console.log('........................');
+    
     res.render("./admin/orders", {
         order,
         currentPage: page,
@@ -28,8 +32,7 @@ const verifyPayment = async (req, res) => {
  
     try {
      
-      let hmac = crypto.createHmac("sha256", process.env.KEY_SECRET);
-  
+      let hmac = crypto.createHmac("sha256", process.env.RZP_TEST_KEY_SECRET);
       hmac.update(
         req.body.payment.razorpay_order_id +
           "|" +
@@ -60,9 +63,10 @@ const verifyPayment = async (req, res) => {
   const orderdetails = async (req, res) => {
     try {
         const orderId = req.params.orderId;
-        console.log(orderId, "0000000000000000000000000");
+        
 
-        const order = await Order.findById(orderId).populate("Items.productId");
+
+        const order = await Order.findById(orderId).populate("Items.ProductId");
 
         if (!order) {
             return res.render("/404");
@@ -72,16 +76,13 @@ const verifyPayment = async (req, res) => {
 
         const orderedProducts = order.Items;
 
-        let customerOrderTotal = 0;
-        orderedProducts.forEach((product) => {
-            customerOrderTotal += product.productId.descountedPrice * product.quantity;
-        });
+        
 
         res.render("./admin/orderdetails", {
-            orderedProducts: orderedProducts,
+            OrderedProducts: orderedProducts,
             customerName: user.Address[0].Name,
             customerAddress: user.Address[0],
-            customerOrderTotal: customerOrderTotal,
+          
         });
     } catch (error) {
         console.log("Error viewing ordered products:", error);

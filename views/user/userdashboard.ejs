@@ -1,35 +1,17 @@
+
 <%-include('./partials/user-header') %>
 <%-include('./partials/user-nav') %>
 <!-- banner -->
-<section class="banner-section">
-    <div class="conatiner">
+
+
+<section class="banner-section" style="margin: 0;">
+    <div class="container-fluid" style="padding: 0 !important;">
         <div class="row">
-            <div class="col-12">
+            <div class="col-12" style="margin: 0 !important;">
                 <div class="row">
-                    <img src="/images/iphone.png" class="img-fluid" alt="banner image">
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="banner-section">
-    <div class="conatiner">
-        <div class="row">
-            <div class="col-12">
-                <div class="row">
-                    <img src="/images/oneplus.png" class="img-fluid" alt="banner image">
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<div class="col-12">         </div>
-<section class="banner-section">
-    <div class="conatiner">
-        <div class="row">
-            <div class="col-12">
-                <div class="row">
-                    <img src="/images/banner.png" class="img-fluid" alt="banner image">
+                    <% banners.forEach((banner, index) => { %>
+                        <img src="/images/<%= banner.image %>" style="width: 100%;">
+                    <% }); %>
                 </div>
             </div>
         </div>
@@ -38,54 +20,45 @@
 
 
 
-<!-- <div class="container">
-    <div class="row">
-        <div class="col-md-4">
-            <img src="/images/card i.png" class="img-fluid" alt="Image 1">
-            
-        </div>
-        <div class="col-md-4">
-            <img src="/images/card real.png" class="img-fluid" alt="Image 2">
-        </div>
-        <div class="col-md-4">
-            <img src='/images/card one plus.png' class="img-fluid" alt="Image 3">
-        </div>
-    </div>
-</div> -->
 
-<!-- <section class="banner-section">
-    <div class="conatiner">
-        <div class="row">
-            <div class="col-12">
-                <div class="row">
-                    <img src="/images/ultra banner.png" class="img-fluid" alt="banner image">
-                </div>
-            </div>
-        </div>
-    </div>
-</section> -->
+
 <hr class="hr" />
 
 <div class="container">
     <div class="row">
-        <% products.forEach(function(product){%>
-        <!-- <div class="container-fluid" style="display: flex;"> -->
- 
-   
-        <div class="col-md-3">
-            <a href="/userProductDetails/<%=product._id %>" class="text-decoration-none text-dark">
-            <img src="/uploads/<%=product.images[0] %>" class="img-fluid" alt="Image 1"   >
-            <div class="caption">
-                <h5><%=product.name%></h5>
-                <p>Rs <%= product.price-product.discount %></p>
+        <% products.forEach(function(product){ %>
+            <div class="col-md-3">
+                <a href="/userProductDetails/<%= product._id %>" class="text-decoration-none text-dark">
+                    <div class="image-container">
+                        <img src="/uploads/<%= product.images[0] %>" class="img-fluid" alt="Image 1">
+                    </div>
+                    <div class="caption">
+                        <h5><%= product.name %></h5>
+                        <p>Rs <%= product.price - product.discount %></p>
+                    </div>
+                </a>
             </div>
-        </a>
-         </div>
-        
         <% }) %>
-   
     </div>
 </div>
+
+<style>
+    .image-container {
+    width: 100%; 
+    height: 400px;
+    overflow: hidden; 
+    object-fit: cover;
+}
+
+.image-container img {
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    object-position: center;
+    object-fit: contain;
+}
+
+</style>
 
 
 

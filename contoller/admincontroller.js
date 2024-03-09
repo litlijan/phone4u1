@@ -3,14 +3,16 @@ const user = require('../model/user');
 const { ObjectId } = require('mongodb')
 const adminRegister = require('../model/admin')
 const bcrypt = require('bcrypt')
+const flash = require("express-flash")
 const brand = require("../model/brandSchema")
 const adminModel = require('../model/admin');
 const product = require('../model/product');
-const Order =require('../model/order')
+const Order = require('../model/order')
+const Banner = require('../model/bannerSchema')
 const { name } = require('ejs');
-const moment=require("moment")
+const moment = require("moment")
 const pdf = require("../utility/salespdf");
-// const { default: orders } = require('razorpay/dist/types/orders');
+
 
 
 
@@ -47,65 +49,65 @@ const admin = async (req, res) => {
 
 }
 const toadmindashboard = async (req, res) => {
- try {
-  const page = parseInt(req.query.page) || 1;
-  const perPage = 5;
-  const skip = (page - 1) * perPage;
-  const brands = await brand.find({}).sort({ name: 1 }).skip(skip).limit(perPage);
-  const totalCount = await brand.countDocuments();
-  res.render("./admin/admindashboard", {
-    brands,
-
-    currentPage: page,
-    perPage,
-    totalCount,
-    totalPages: Math.ceil(totalCount / perPage),
-  });
- } catch (error) {
-  console.log(error);
- }
-}
-
-//get for usermangement
-const usermanagement = async (req, res) => {
   try {
-    var i = 0
-  const page = parseInt(req.query.page) || 1;
-  const perPage = 5;
-  const skip = (page - 1) * perPage;
-  const userss = await brand.find({}).sort({ name: 1 }).skip(skip).limit(perPage);
-  const totalCount = await brand.countDocuments();
-  const userData = await user.find().sort({ username: 1, email: 1, status: 1 })
-  res.render('./admin/usermangerment', {
-    userData, i, userss,
+    const page = parseInt(req.query.page) || 1;
+    const perPage = 5;
+    const skip = (page - 1) * perPage;
+    const brands = await brand.find({}).sort({ name: 1 }).skip(skip).limit(perPage);
+    const totalCount = await brand.countDocuments();
+    res.render("./admin/admindashboard", {
+      brands,
 
-    currentPage: page,
-    perPage,
-    totalCount,
-    totalPages: Math.ceil(totalCount / perPage),
-  })
+      currentPage: page,
+      perPage,
+      totalCount,
+      totalPages: Math.ceil(totalCount / perPage),
+    });
   } catch (error) {
     console.log(error);
   }
 }
 
-//post method for userblock
+
+const usermanagement = async (req, res) => {
+  try {
+    var i = 0
+    const page = parseInt(req.query.page) || 1;
+    const perPage = 5;
+    const skip = (page - 1) * perPage;
+    const userss = await brand.find({}).sort({ name: 1 }).skip(skip).limit(perPage);
+    const totalCount = await brand.countDocuments();
+    const userData = await user.find().sort({ username: 1, email: 1, status: 1 })
+    res.render('./admin/usermangerment', {
+      userData, i, userss,
+
+      currentPage: page,
+      perPage,
+      totalCount,
+      totalPages: Math.ceil(totalCount / perPage),
+    })
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
 const userBlock = async (req, res) => {
   const id = req.params.id
   const block = await user.updateOne({ _id: id }, { $set: { status: false } })
   return res.redirect('/admin/mangeuser')
 }
 
-//post method for userblock
+
 const unBlock = async (req, res) => {
-try {
-  const userId = req.params.userId;
-  const unblocks = await user.updateOne({ _id: userId }, { status: true });
-  return res.redirect('/admin/mangeuser')
-} catch (error) {
-  console.log(error);
-}
-  
+  try {
+    const userId = req.params.userId;
+    const unblocks = await user.updateOne({ _id: userId }, { status: true });
+    return res.redirect('/admin/mangeuser')
+  } catch (error) {
+    console.log(error);
+  }
+
 }
 
 
@@ -129,26 +131,27 @@ const BlockandUnblock = async (req, res) => {
 }
 
 
-// Category GET
+
 const tocategory = async (req, res) => {
   try {
     const title = "category"
-  var i = 0
-  const page = parseInt(req.query.page) || 1;
-  const perPage = 5;
-  const skip = (page - 1) * perPage;
-  const cate = await brand.find({}).sort({ name: 1 }).skip(skip).limit(perPage);
-  const totalCount = await brand.countDocuments();
+    var i = 0
+    const page = parseInt(req.query.page) || 1;
+    const perPage = 5;
+    const skip = (page - 1) * perPage;
+    const cate = await brand.find({}).sort({ name: 1 }).skip(skip).limit(perPage);
+    const totalCount = await brand.countDocuments();
 
-  const categoryData = await category.find().sort({ name: 1, date: 1, status: 1, stock: 1 })
-  res.render('./admin/category', {
-    title, i, categoryData, cate,
+    const categoryData = await category.find().sort({ name: 1, date: 1, status: 1, stock: 1 })
+    res.render('./admin/category', {
+      title, i, categoryData, cate,
 
-    currentPage: page,
-    perPage,
-    totalCount,
-    totalPages: Math.ceil(totalCount / perPage),
-  })
+      currentPage: page,
+      perPage,
+      totalCount,
+      totalPages: Math.ceil(totalCount / perPage),
+      
+    })
   } catch (error) {
     console.log(error);
   }
@@ -156,17 +159,17 @@ const tocategory = async (req, res) => {
 
 const postaddcategory = async (req, res) => {
 
-try {
-  const categories = {
-    name: req.body.name,
+  try {
+    const categories = {
+      name: req.body.name,
+    }
+
+    await new category(categories).save()
+
+    res.redirect('/admin/category')
+  } catch (error) {
+    console.log(error);
   }
-
-  await new category(categories).save()
-
-  res.redirect('/admin/category')
-} catch (error) {
-  console.log(error);
-}
 
 
 
@@ -176,11 +179,11 @@ const addcategory = async (req, res) => {
 }
 
 const toproduct = async (req, res) => {
-  console.log('@@@@@');
+ 
   try {
 
     const products = await product.find()
-    console.log("..........................................................");
+
     res.render('./admin/product', { productData: products })
   } catch (error) {
     console.error('error while rendering the profile page:', error)
@@ -190,20 +193,20 @@ const toproduct = async (req, res) => {
 const editCategory = async (req, res) => {
   const { id } = req.params
   const editCategory = await category.findById({ _id: id })
-  res.render("./admin/editCategory", { editCategory })
+  res.render("./admin/editCategory", { editCategory})
 }
 
 const editedCategory = async (req, res) => {
   try {
     const { id } = req.params
-  const { name } = req.body
-  const categoryname = name.trim()
-  const catUpdate = await category.findByIdAndUpdate({ _id: id }, { name: categoryname })
-  res.redirect("/admin/category")
+    const { name } = req.body
+    const categoryname = name.trim()
+    const catUpdate = await category.findByIdAndUpdate({ _id: id }, { name: categoryname })
+    res.redirect("/admin/category")
   } catch (error) {
     console.log(error);
   }
-  
+
 }
 
 const disableandenable = async (req, res) => {
@@ -224,188 +227,225 @@ const disableandenable = async (req, res) => {
 }
 
 const enable = async (req, res) => {
-try {
-  const userId = req.params.userId;
-  const unblocks = await category.updateOne({ _id: userId }, { status: true });
-  return res.redirect('/admin/category')
-} catch (error) {
-  console.log(error);
-}
- 
+  try {
+    const userId = req.params.userId;
+    const unblocks = await category.updateOne({ _id: userId }, { status: true });
+    return res.redirect('/admin/category')
+  } catch (error) {
+    console.log(error);
+  }
+
 }
 
-const getcount=async(req,res)=>{
+const getcount = async (req, res) => {
   try {
-    const orders = await Order.find({
-      Status: {
-        $nin:["returned","Cancelled","Rejected"]
+    let aggregationPipeline = [];
+    
+    if (req.url === "/count-orders-by-day") {
+      aggregationPipeline.push(
+        {
+          $match: {
+            Status: {
+              $nin: ["returned", "Cancelled", "Rejected"]
+            }
+          }
+        },
+        {
+          $group: {
+            _id: { $dateToString: { format: "%Y-%m-%d", date: "$OrderDate" } },
+            count: { $sum: 1 },
+            total: { $sum: "$total" }
+          }
+        },
+        {
+          $sort: { _id: 1 }
+        }
+      );
+    } else if (req.url === "/count-orders-by-month") {
+      aggregationPipeline.push(
+        {
+          $match: {
+            Status: {
+              $nin: ["returned", "Cancelled", "Rejected"]
+            }
+          }
+        },
+        {
+          $group: {
+            _id: { $dateToString: { format: "%Y-%m", date: "$OrderDate" } },
+            count: { $sum: 1 },
+            total: { $sum: "$total" }
+          }
+        },
+        {
+          $sort: { _id: 1 }
+        }
+      );
+    } else if (req.url === "/count-orders-by-year") {
+      aggregationPipeline.push(
+        {
+          $match: {
+            Status: {
+              $nin: ["returned", "Cancelled", "Rejected"]
+            }
+          }
+        },
+        {
+          $group: {
+            _id: { $dateToString: { format: "%Y", date: "$OrderDate" } },
+            count: { $sum: 1 },
+            total: { $sum: "$total" }
+          }
+        },
+        {
+          $sort: { _id: 1 }
+        }
+      );
+    }
+
+    const result = await Order.aggregate(aggregationPipeline);
+
+    const labelsByCount = result.map(entry => {
+      if (req.url === "/count-orders-by-day") {
+        return moment(entry._id, "YYYY-MM-DD").format("DD MMM YYYY");
+      } else if (req.url === "/count-orders-by-month") {
+        return moment(entry._id, "YYYY-MM").format("MMM YYYY");
+      } else if (req.url === "/count-orders-by-year") {
+        return entry._id;
       }
     });
-    const orderCountsByDay = {};
-    const totalAmountByDay = {};
-    const orderCountsByMonthYear = {};
-    const totalAmountByMonthYear = {};
-    const orderCountsByYear = {};
-    const totalAmountByYear = {};
-    let labelsByCount;
-    let labelsByAmount;  
-    orders.forEach((order) => {
-      const orderDate = moment(order.OrderDate, "M/D/YYYY, h:mm:ss A");
-      const dayMonthYear = orderDate.format("YYYY-MM-DD");
-      const monthYear = orderDate.format("YYYY-MM");
-      const year = orderDate.format("YYYY");
 
-      if(req.url==="/count-orders-by-day")
-      {
-        if(!orderCountsByDay[dayMonthYear])
-        {
-          orderCountsByDay[dayMonthYear] = 1;
-          totalAmountByDay[dayMonthYear] = order.total
-        }
-        else{
-          orderCountsByDay[dayMonthYear] ++;
-          totalAmountByDay[dayMonthYear] += order.total
+    const dataByCount = result.map(entry => entry.count);
+    const dataByAmount = result.map(entry => entry.total);
 
-        }
-        const ordersByDay = Object.keys(orderCountsByDay).map(
-          (dayMonthYear) => ({
-            _id: dayMonthYear,
-            count: orderCountsByDay[dayMonthYear],
-          })
-        );
+    res.json({ labelsByCount, dataByCount, dataByAmount });
 
-        const amountsByDay = Object.keys(totalAmountByDay).map(
-          (dayMonthYear)=>({
-            _id: dayMonthYear,
-            total: totalAmountByDay[dayMonthYear],
-          })
-
-        )
-        amountsByDay.sort((a, b) => (a._id > b._id ? -1 : 1));
-        ordersByDay.sort((a, b) => (a._id > b._id ? -1 : 1));
-
-        labelsByCount = ordersByDay.map((entry) =>
-        moment(entry._id, "YYYY-MM-DD").format("DD MMM YYYY")
-      );
-
-      labelsByAmount = amountsByDay.map((entry) =>
-        moment(entry._id, "YYYY-MM-DD").format("DD MMM YYYY")
-      );
-
-      dataByCount = ordersByDay.map((entry) => entry.count);
-      dataByAmount = amountsByDay.map((entry) => entry.total);
-
-      }else if (req.url === "/count-orders-by-month") {
-        if (!orderCountsByMonthYear[monthYear]) {
-          orderCountsByMonthYear[monthYear] = 1;
-          totalAmountByMonthYear[monthYear] = order.total;
-        } else {
-          orderCountsByMonthYear[monthYear]++;
-          totalAmountByMonthYear[monthYear] += order.total;
-        }
-      
-        const ordersByMonth = Object.keys(orderCountsByMonthYear).map(
-          (monthYear) => ({
-            _id: monthYear,
-            count: orderCountsByMonthYear[monthYear],
-          })
-        );
-        const amountsByMonth = Object.keys(totalAmountByMonthYear).map(
-          (monthYear) => ({
-            _id: monthYear,
-            total: totalAmountByMonthYear[monthYear],
-          })
-        );
-       
-      
-        ordersByMonth.sort((a, b) => (a._id < b._id ? -1 : 1));
-        amountsByMonth.sort((a, b) => (a._id < b._id ? -1 : 1));
-      
-        labelsByCount = ordersByMonth.map((entry) =>
-          moment(entry._id, "YYYY-MM").format("MMM YYYY")
-        );
-        labelsByAmount = amountsByMonth.map((entry) =>
-          moment(entry._id, "YYYY-MM").format("MMM YYYY")
-        );
-        dataByCount = ordersByMonth.map((entry) => entry.count);
-        dataByAmount = amountsByMonth.map((entry) => entry.total);
-      } else if (req.url === "/count-orders-by-year") {
-        // Count orders by year
-        if (!orderCountsByYear[year]) {
-          orderCountsByYear[year] = 1;
-          totalAmountByYear[year] = order.total;
-        } else {
-          orderCountsByYear[year]++;
-          totalAmountByYear[year] += order.total;
-        }
-      
-        const ordersByYear = Object.keys(orderCountsByYear).map((year) => ({
-          _id: year,
-          count: orderCountsByYear[year],
-        }));
-        const amountsByYear = Object.keys(totalAmountByYear).map((year) => ({
-          _id: year,
-          total: totalAmountByYear[year],
-        }));
-      
-        ordersByYear.sort((a, b) => (a._id < b._id ? -1 : 1));
-        amountsByYear.sort((a, b) => (a._id < b._id ? -1 : 1));
-      
-        labelsByCount = ordersByYear.map((entry) => entry._id);
-        labelsByAmount = amountsByYear.map((entry) => entry._id);
-        dataByCount = ordersByYear.map((entry) => entry.count);
-        dataByAmount = amountsByYear.map((entry) => entry.total);
-       
-      }
-    })
-    res.json({ labelsByCount,labelsByAmount, dataByCount, dataByAmount });
-
-}
-catch(error)
-{
- console.log(error);
-}
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Internal Server Error");
+  }
 }
 
-const lastorderandbeast=async(req,res)=>{
+const lastorderandbeast = async (req, res) => {
   try {
- 
+
     const latestOrders = await Order.find().sort({ _id: -1 }).limit(6);
 
-  if (!latestOrders ) throw new Error("No Data Found");
-
-  res.json({ latestOrders });
+    const bestSeller = await Order.aggregate([
+      
+      { $unwind: "$Items" },
+      
+      {
+        $group: {
+          _id: "$Items.ProductId",
+          totalSold: { $sum: "$Items.Quantity" }
+        }
+      },
+      
+      { $sort: { totalSold: -1 } },
+      
+      { $limit: 3 },
+      
+      {
+        $lookup: {
+          from: "product",
+          localField: "_id",
+          foreignField: "_id",
+          as: "productDetails"
+        }
+      },
+      
+      { $unwind: "$productDetails" },
+      
+      {
+        $project: {
+          _id: 0,
+          product_id: "$productDetails._id",
+          productName: "$productDetails.name",
+          Price: "$productDetails.price",
+          status: "$productDetails.status",
+          images:"$productDetails.images",
+          totalSold: 1
+        }
+      }
+    ])
     
+    
+
+
+
+    console.log(bestSeller, "000000000000000000000000000");
+
+
+
+
+    if (!latestOrders || !bestSeller) throw new Error("No Data Found");
+
+    res.json({ latestOrders, bestSeller });
+
   } catch (error) {
     console.log(error)
   }
 }
 
-const genereatesalesReport=async(req,res)=>{
+const genereatesalesReport = async (req, res) => {
   try {
     const startDate = req.body.startDate
     const format = req.body.downloadFormat
     const endDate = req.body.endDate
-    const orders = await Order.find({
-      PaymentStatus: 'Paid',
-    }).populate('Items.ProductId')
+    const orders = await Order.find({ PaymentStatus: 'Paid' }).populate('Items.ProductId');
 
-    
-    const totalSales = await Order.aggregate([
-      {
-      $match:{
-        PaymentStatus: 'Paid',
-      }
+    const startDate_Time = new Date(`${startDate}T00:00:00Z`);
+const endDate_Time = new Date(`${endDate}T23:59:59Z`);
+
+const totalSales = await Order.aggregate([
+  {
+    $match: {
+      OrderDate: {
+        $gte: startDate_Time,
+        $lte: endDate_Time,
+      },
+    },
+  },
+  {
+    $unwind: "$Items" 
+  },
+  {
+    $lookup: {
+      from: "product", 
+      localField: "Items.ProductId",
+      foreignField: "_id",
+      as: "product"
+    }
+  },
+  {
+    $unwind: "$product" 
   },
   {
     $group: {
-      _id: null,
-      totalSales: {$sum: '$TotalPrice'}
+      _id: "$_id",
+      OrderId: { $first: "$randomOrderId" }, 
+      OrderDate: { $first: "$OrderDate" }, 
+      PaymentMethod: { $first: "$PaymentMethod" }, 
+      totalOrderPrice: { 
+        $sum: { 
+          $multiply: ["$Items.Quantity", "$product.price"] 
+        } 
+      }
     }
   }
-])
-const sum = totalSales.length > 0 ? totalSales[0].totalSales : 0;
-pdf.downloadPdf(req,res,orders,startDate,endDate,totalSales)
+]);
+
+
+    const newArray=totalSales
+    newArray.forEach((value)=>{
+      value.OrderDate=value.OrderDate.toLocaleDateString('en-GB')
+
+    })
+    
+   
+    const sum = totalSales.length > 0 ? totalSales[0].totalSales : 0;
+    pdf.downloadPdf(req, res, startDate, endDate,newArray)
 
   } catch (error) {
     console.log(error);
@@ -413,7 +453,49 @@ pdf.downloadPdf(req,res,orders,startDate,endDate,totalSales)
 
 }
 
+const bannerManagement = async (req, res) => {
+  try {
+    const banners = await Banner.find()
+    res.render("./admin/bannermanagement", { banners })
 
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const bannerManagementpost = async (req, res) => {
+  try {
+  
+    if (!req.file) {
+      return res.status(400).send('Please upload an image.');
+    }
+
+    const { filename } = req.file;
+
+    const newBanner = new Banner({
+      title: req.body.title,
+      image: filename,
+    });
+   
+
+    await newBanner.save();
+
+    res.redirect('/admin/bannerManagement')
+
+  } catch (error) {
+    console.log("error while uploading the banner:", error);
+  }
+}
+
+const deletebannerManagement=async(req,res)=>{
+  try {
+    const bannerId = req.params.bannerId;
+    await Banner.findByIdAndDelete(bannerId);
+    res.redirect('/admin/bannerManagement');
+} catch (error) {
+    console.error('error while delete banner:',error)
+}
+}
 
 module.exports = {
   toadmin,
@@ -432,6 +514,9 @@ module.exports = {
   enable,
   getcount,
   lastorderandbeast,
-  genereatesalesReport
+  genereatesalesReport,
+  bannerManagement,
+  bannerManagementpost,
+  deletebannerManagement
 
 }

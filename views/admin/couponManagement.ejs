@@ -273,29 +273,31 @@
       $("#couponForm").submit(function (e) {
           e.preventDefault();
 
-          // Validate start date
+          
           var startDate = new Date($("#startDate").val());
-          var currentDate = new Date();
-          if (startDate < currentDate) {
-              $("#flashMessage").text("Start date must be greater than or equal to the current date.").show();
-              return;
-          }
+var currentDate = new Date();
+currentDate.setHours(0, 0, 0, 0); 
 
-          // Validate end date
+if (startDate < currentDate) {
+    $("#flashMessage").text("Start date must be greater than or equal to today's date.").show();
+    return;
+}
+
+          
           var endDate = new Date($("#endDate").val());
           if (endDate <= startDate) {
               $("#flashMessage").text("End date must be greater than start date.").show();
               return;
           }
 
-          // Validate no spaces in the coupon code
+          
           var couponCode = $("#couponCode").val();
           if (/\s/.test(couponCode)) {
               $("#flashMessage").text("Coupon code cannot contain spaces.").show();
               return;
           }
 
-          // If all validations pass, proceed with form submission
+          
           $.ajax({
               url: "/admin/addCoupon",
               method: "POST",
@@ -303,7 +305,6 @@
               success: function (response) {
                   if (response.success) {
                       console.log(response);
-                      console.log("Coupon added successfully");
                       window.location.reload();
                       $("#addCouponModal").modal("hide");
                       alert("Coupon Added successfully");

@@ -1,12 +1,15 @@
 const ejs = require('ejs');
 const pdf = require('html-pdf');
 const fs = require('fs');
+const Orders = require('../model/order');
 module.exports ={
+   
 
-    downloadPdf : (req,res,orders,startDate,endDate,totalSales)=>{
+    downloadPdf : (req,res,startDate,endDate,newArray)=>{
     const template = fs.readFileSync('utility/template.ejs', 'utf-8');
     
-    const html = ejs.render(template, { orders, startDate, endDate, totalSales });
+    
+    const html = ejs.render(template, { startDate, endDate,newArray });
     
     const pdfOptions = {
         format: 'Letter',
@@ -18,4 +21,5 @@ module.exports ={
         res.status(200).download(response.filename);
     });
     }
+    
 }

@@ -9,6 +9,7 @@ const category = require('../model/category')
 const getcart = async (req, res) => {
   const userEmail = req.session?.email;
   const productId = req.body?.productid;
+  req.session.totalPrice = req.body.totalPrice
   try {
     const users = await user.find({ email: userEmail });
     if (!users || users.length === 0) {
@@ -18,14 +19,12 @@ const getcart = async (req, res) => {
 
     let cartexist = await Cart.findOne({ UserId: userId });
 
-    console.log(cartexist, '/////////////////////////');
 
     if (cartexist) {
       const existingCart = cartexist.Items.filter((item) =>
         item.ProductId.equals(productId)
 
       );
-      console.log(existingCart,'*************************************')
       if (existingCart?.length > 0) {
         existingCart[0].Quantity += 1;
       }
@@ -38,6 +37,7 @@ const getcart = async (req, res) => {
       cartexist = new Cart({
         UserId: userId,
         Items: [{ ProductId: productId, Quantity: 1 }],
+        
       });
       await cartexist.save();
       return res.json({ success: true, message: 'new item' });
@@ -54,13 +54,11 @@ const cart = async (req, res) => {
 
     const userEamail = req.session.email;
 
-    console.log(userEamail, ' this is user in erro')
     
     const users = await user.findOne({ email: userEamail });
     const cart = await Cart.findOne({ UserId: users._id }).populate("Items.ProductId");
-    const value=await Cart.findOne({ UserId: users._id }).populate("Items.ProductId");
-    console.log(cart,'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL');
-    res.render("./user/cart", { users, cart,value });
+    
+    res.render("./user/cart", { users, cart });
   } catch (err) {
     console.log(' Error in cart section ', err);
   }
@@ -72,16 +70,16 @@ const removeFromCart = async (req, res) => {
     const users = await user.findOne({ email: userId });
     console.log(users);
     const productId = req.params._id;
-    console.log(productId, '.............................');
+    
 
     const updatedCart = await Cart.updateOne(
       { UserId:users._id },
       { $pull: { Items: { ProductId: productId} } },
       { new: true }
     );
-    console.log("delete : ", updatedCart);
+    
     console.log(productId);
-    // res.json({success:true})
+    
     res.redirect("/user/cart")
   } catch (error) {
     console.log("some  problems ",error)
@@ -89,52 +87,62 @@ const removeFromCart = async (req, res) => {
 }
 const updatingQuantity = async (req, res) => {
   try {
-    console.log('inc api called ');
-      const { productId, change } = req.body;
-      const email = req.session.email;
-      const userrr = await user.findOne({email:email})
-      const userCart = await Cart.findOne({ UserId:userrr._id });
-      const products = await product.findById(productId);
-      if (!userCart || !products) {
-          return res.status(404).json({ error: "Product or cart not found" });
-      }
-      const cartItem = userCart.Items.find((item) =>
-          item.ProductId.equals(productId)
+    
+    const { productId, change } = req.body;
+    const email = req.session.email;
+    const userrr = await user.findOne({ email: email });
+    const userCart = await Cart.findOne({ UserId: userrr._id });
+    const products = await product.findById(productId);
+    if (!userCart || !products) {
+      return res.status(404).json({ error: "Product or cart not found" });
+    }
+    const cartItem = userCart.Items.find((item) =>
+      item.ProductId.equals(productId)
+    );
+    if (!cartItem) {
+      return res.status(404).json({ error: "Product or cart not found" });
+    }
+    const newQuantity = cartItem.Quantity + parseInt(change);
+   
+    if (newQuantity <= 0) {
+     
+      userCart.Items = userCart.Items.filter(
+        (item) => !item.ProductId.equals(productId)
       );
-      if (!cartItem) {
-          return res.status(404).json({ error: "Product or cart not found" });
-      }
-      const newQuantity = cartItem.Quantity + parseInt(change);
-      if (newQuantity < 1) {
-          userCart.Items = userCart.Items.filter(
-              (item) => !item.ProductId.equals(productId)
-          );
-      } else {
-          cartItem.Quantity = newQuantity;
-      }
-      console.log("");
-      await userCart.save();
-      res.json({ message: "Quantity updated successfully", newQuantity });
+    
+    } else {
+      cartItem.Quantity = newQuantity;
+     
+    }
+    if (userCart.Items.length === 0) {
+      await userCart.remove();
+      return res.json({ message: "Cart is empty", cart: null });
+    }
+
+    await userCart.save();
+    res.json({ message: "Quantity updated successfully", newQuantity });
   } catch (error) {
-      console.error("Error updating quantity:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+    console.error("Error updating quantity:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 }
+
 
 const postcart = async (req, res) => {
   try {
 
-    console.log("ggggggggggggggggggggggggggggggggggggggggggggggg");
+
     const UserId = req.session.email;
+    
     req.session.totalPrice = parseInt(req.body.totalPrice);
     res.locals.totalPrice=res.session.totalPrice
-    console.log(locals.totalPrice,"totoalllllllllll");
+
     const cart = await Cart.findOneAndUpdate(
       { UserId: UserId.trim() },
-      { $set: { TotalAmount: req.session.totalPrice } },
+      { $set: { Total: req.session.totalPrice } },
       { new: true }
     );
-    console.log("reached here", req.session.totalPrice, cart);
+    
 
     res.json({ success: true});
 
@@ -145,18 +153,29 @@ const postcart = async (req, res) => {
 
 const PlaceOrder = async (req, res) => {
 try {
-  const total=req.query.data;
-  console.log(total,'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<111111111111111');
+  let  total=req.query.data;
+  
+  req.session.total=total
+  if(req.session.discount!=null||undefined)
+  {
+    req.session.total=total-req.session.discount;
+    total=req.session.total;
+  }
+
   const userId = req.session.email;
   const users = await user.findOne({email:userId});
   const cart = await Cart.findOne({ UserId: users}).populate(
     "Items.ProductId"
   );
+  const quantity = cart.Items[0].Quantity;
+  const product = cart.Items[0].ProductId;
+  const productName = product.name;
+
   if (!cart) {
     res.redirect("/cart");
   
   } else {
-    res.render("user/checkout", { users,cart,total});
+    res.render("user/checkout", { users,cart,total,quantity,productName});
   }
 } catch (error) {
   console.log(error);

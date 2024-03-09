@@ -152,7 +152,9 @@
       
 <div class="card">
   <div class="card-body">
-    <p class="mb-2">Total price: <%= total %></p>
+    <p class="mb-2">name:<%= productName %></p>
+    <p class="mb-2"> price: <%= total %></p>
+    <p class="mb-2"> Quantity:<%= quantity %></p>
       <h5 class="card-title">Payment Methods</h5>
 
       <div class="form-check">
@@ -183,7 +185,7 @@
       </div>
       
       <!-- Add the "Pay Using Wallet" radio button here -->
-      <div class="form-check">
+      <!-- <div class="form-check">
           <input
               class="form-check-input"
               type="radio"
@@ -191,10 +193,10 @@
               id="wallet"
               value="wallet"
           />
-          <label class="form-check-label" data-walletAmount="<%=users.WalletAmount%>" id="<%=cart.TotalAmount%>" for="wallet">
-              Pay Using Wallet (Available Wallet Balance: <%=users.WalletAmount%>)
+          <label class="form-check-label" data-walletAmount="" id="" for="wallet">
+              Pay Using Wallet (Available Wallet Balance:)
           </label>
-      </div>
+      </div> -->
 
       <div class="justify-content-center">
           <button class="btn btn-success mt-4" id="confirmOrderButton" >
@@ -321,6 +323,14 @@
     
     e.preventDefault()
     const selectedAddress = $("input[name='Address']:checked").val();
+    const selectedMethod = $("input[name='paymentMethod']:checked").val();
+
+    if(selectedMethod=="cod"&& '<%= total %>'>1000)
+    {
+      alert("amount greater than 1000")
+      return 
+    }
+
     if (!selectedAddress) {
         Swal.fire({
           icon: "error",
@@ -330,6 +340,7 @@
         });
         return
       }
+
      
       
       $.ajax({ 
@@ -337,15 +348,13 @@
         method: 'post',
          data: $('#form-checkout').serialize() + '&total=' + '<%= total %>',
         success: (response) => {
-          if (response.codSuccess) {
+          if (response.codSuccess|| parseFloat($('total').val()) <= 1000) {
      
             window.location = '/ordersuccess'
             
           } else if(response.online) {
-            // alert("payment raa")
+           
           handlePayNowClick(response)
-        }else if(response.wallet){
-          window.location = '/ordersuccess'
         }else{
           alert(response.error)
           if(confirm){
@@ -357,14 +366,14 @@
 
   })
   function handlePayNowClick (order) {
-    console.log('pppppppppppppppppppppppppp');
+    
     var options = {
     "key": "rzp_test_nz16kmykXJ1LF3",
     "amount": order.createdOrder.amount, 
     "currency": "INR",
     "name": "phone4u",
     "description": "Test Transaction",
-    "image": "https://example.com/your_logo",
+    "image": "/images/phone4u",
     "order_id": order.createdOrder.id, 
     "handler": function (response){
         verifyPayment(response, order)
@@ -379,13 +388,23 @@
       "color": "#3399cc"
     }
   };
-  console.log(options,"55555555555555555555555555555555555555")
+
   var rzp1 = new Razorpay(options);
+  rzp1.on('payment.failed', function (resp) {
+            console.log('error:', resp.error.code);
+            console.log('error:', resp.error.description);
+            console.log('error:', resp.error.source);
+            console.log('error:', resp.error.step);
+            console.log('error:', resp.error.reason);
+            console.log('error:', resp.error.metadata.order_id);
+            console.log('error:', resp.error.metadata.payment_id);
+          
+            window.location.href = '/ordersuccess'  
+});
   rzp1.open();
   }
- console.log('ooooooooooooooooooooooooo');
   function verifyPayment (payment, order) {
-    console.log('now in verifyPayment')
+
     $.ajax({
       url: '/verify-payment',
       data: {
@@ -395,10 +414,8 @@
       method: 'post',
       success: (response) => {
         if (response.success) {
-          console.log('response got')
-          location.href = '/orderSuccess'
+          location.href = '/ordersuccess'
         }else{
-          console.log('response not get');
           location.href = '*'
         }
       }

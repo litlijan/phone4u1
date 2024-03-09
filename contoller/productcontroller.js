@@ -25,7 +25,7 @@ const product_get = async (req, res) => {
    }
 }
 
-//  Add product GET
+
 
 const addproduct_get = async (req, res) => {
 
@@ -48,7 +48,7 @@ const addproduct_post = async (req, res) => {
         const newCategory = await category.findOne({ name: req.body.category })
         console.log(newCategory);
         const newBrand = await brand.findOne({ name: req.body.brand })
-        console.log(newBrand, '#######');
+        
         for (let i = 1; i <= 4; i++) {
             const fieldName = `image${i}`;
             if (req.files[fieldName] && req.files[fieldName][0]) {
@@ -77,7 +77,6 @@ const addproduct_post = async (req, res) => {
             images: images,
         });
         await newProduct.save()
-        // req.flash("success", "Product is Added Successfully");
         res.redirect("/admin/Product");
     } catch (error) {
         console.log(error);
@@ -104,7 +103,7 @@ const productDetails = async (req, res) => {
     try {
         const { id } = req.params
         const productToDisplay = await product.findOne({ _id: id }).populate('brand category')
-        // console.log(productToDisplay);
+
         res.render("./admin/productDetails", { productToDisplay })
     } catch (error) {
         console.log(error)
@@ -178,13 +177,13 @@ const deleteProduct = async (req, res) => {
 const deleteimage=async(req,res)=>
 {
     try{
-        console.log('1234567890')
+
         const id=req.params.id
-        console.log(id,'ppppppppppppppppppppppppppp')
+
         const imageIndex=req.params.index
-        console.log(imageIndex,"imageeeeeeee inddddddddddddddddd");
+
         const productimage=await product.findById(id)
-        console.log(productimage,"ddddddddddddddddd");
+        
         if(!productimage){
             res.status(404).json({success:false,message:"prouduct not found"})
             return

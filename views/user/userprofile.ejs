@@ -32,6 +32,17 @@
             />
             <br />
             <div class="form-group">
+              <label for="newPassword" >Current Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="currentPassword"
+                placeholder="Current Password"
+                autocomplete="Current-Password"
+              />
+            </div>
+            <br />
+            <div class="form-group">
               <label for="newPassword">New Password</label>
               <input
                 type="password"
@@ -70,30 +81,19 @@
                 <div
                   class="profile-pic d-flex flex-column align-items-center text-center py-5"
                 >
-                  <div class="d-flex justify-content-center ms-5">
-                    <label
-                      class="form-label text-white m-1"
-                      for="customFile2"
-                    ></label>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      id="imageinput"
-                      onchange="uploadProfilePicture(event)"
-                    />
-                  </div>
-                  <br />
+                <div class="d-flex justify-content-center ms-5">
+                  <!-- <label class="form-label text-white m-1" for="customFile2"></label> -->
+                  <!-- <input type="file" accept="image/*" id="imageinput" onchange="uploadProfilePicture(event)" /> -->
+              </div>
+              <br />
 
-                  <div class="profilePhoto">
-                    <img
-                      class="rounded-circle mt-5 img-fluid"
-                      width="150px"
-                      src="/profile-images/cropped_images/<%= profile.profilePhoto || 'https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg' %>"
-                      id="selectedAvathar"
-                      alt="Default Image"
-                      style="object-fit: cover"
-                    />
-                  </div>
+              <!-- <div class="profilePhoto">
+                <img class="rounded-circle mt-5 img-fluid" width="150px"
+                     src="/images/<%= profile.profilePhoto || 'default-image.jpg' %>"
+                     id="selectedAvathar"
+                     alt="Default Image"
+                     style="object-fit: cover"/>
+            </div> -->
 
                   <span class="font-weight-bold"
                     ><b><%= profile.name %></b></span
@@ -140,17 +140,7 @@
                       value="<%= profile.email %>"
                     />
                   </div>
-                  <!-- <div class="col-md-12">
-                    <label class="labels">Phone Number :</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="phone"
-                      placeholder="Phone Number"
-                      value=""
-                    />
-                  </div> -->
-                  <br />
+
                 </div>
 
                 <div class="d-flex justify-content-around">
@@ -167,7 +157,7 @@
                 <br />
               </form>
 
-              <div class="d-flex justify-content-center">
+              <!-- <div class="d-flex justify-content-center">
                 <div class="d-flex align-items-center" style="width: 470px">
                   <div class="input-group mb-3 d-flex">
                     <div class="d-flex align-items-center mt-2">
@@ -202,7 +192,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
               <br />
             </div>
@@ -210,10 +200,10 @@
         </div>
 
         <div class="col-md-12">
-          <!-- <div class="row"> -->
+          
           <div class="card shadow border mt-5 ms-5 me-5">
-            <div class="card-body d-flex">
-              <div class="col-md-2 m-4">
+            <div class="card-body d-flex justify-content-center">
+              <div class="col-md-3 m-6">
                 <a
                   href="/user/trackOrder"
                   style="text-decoration: none; color: black"
@@ -222,11 +212,11 @@
                     <div
                       class="card-body d-flex flex-column align-items-center"
                     >
+
                       <br />
-                      <i
-                        class="fa-solid fa-clock-rotate-left fa-2xl"
-                        style="color: #000000"
-                      ></i>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive-fill" viewBox="0 0 16 16">
+                        <path d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1M.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8z"/>
+                      </svg>
                       <br />
                       <h5>Orders History</h5>
                     </div>
@@ -234,17 +224,16 @@
                 </a>
               </div>
 
-              <div class="col-md-2 m-4">
-                <a href="/cart" style="text-decoration: none; color: black">
+              <div class="col-md-3 m-6">
+                <a href="/user/cart" style="text-decoration: none; color: black">
                   <div class="card shadow border">
                     <div
                       class="card-body d-flex flex-column align-items-center"
                     >
                       <br />
-                      <i
-                        class="fa-solid fa-cart-shopping fa-2xl"
-                        style="color: #000000"
-                      ></i>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-check-fill" viewBox="0 0 16 16">
+                        <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708"/>
+                      </svg>
                       <br />
                       <h5>Cart</h5>
                     </div>
@@ -252,17 +241,17 @@
                 </a>
               </div>
 
-              <div class="col-md-2 m-4">
+              <div class="col-md-3 m-6">
                 <a href="/address" style="text-decoration: none; color: black">
                   <div class="card shadow border">
                     <div
                       class="card-body d-flex flex-column align-items-center"
                     >
                       <br />
-                      <i
-                        class="fa-solid fa-location-dot fa-2xl"
-                        style="color: #00060f"
-                      ></i>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-add" viewBox="0 0 16 16">
+                        <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                        <path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4"/>
+                      </svg>
                       <br />
                       <h5>Address</h5>
                     </div>
@@ -270,26 +259,8 @@
                 </a>
               </div>
 
-              <div class="col-md-2 m-4">
-                <a href="/wishlist" style="text-decoration: none; color: black">
-                  <div class="card shadow border">
-                    <div
-                      class="card-body d-flex flex-column align-items-center"
-                    >
-                      <br />
 
-                      <i
-                        class="fa-solid fa-heart fa-2xl"
-                        style="color: #000000"
-                      ></i>
-                      <br />
-                      <h5>Wishlist</h5>
-                    </div>
-                  </div>
-                </a>
-              </div>
-
-              <div class="col-md-2 m-4">
+              <div class="col-md-3 m-6">
                 <a href="/coupoun" style="text-decoration: none; color: black">
                   <div class="card shadow border">
                     <div
@@ -297,10 +268,9 @@
                     >
                       <br />
 
-                      <i
-                        class="fa-solid fa-link fa-2xl"
-                        style="color: #000000"
-                      ></i>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
+                        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
+                      </svg>
                       <br />
                       <h5>Coupons</h5>
                     </div>
@@ -308,22 +278,10 @@
                 </a>
               </div>
 
-              <!-- <div class="col-md-2">
-                <div class="card shadow border">
-                  <div class="card-body justify-content-center">
-                    <a href="/accountSettings" style="text-decoration: none; color: black;">
-                    <i
-                      class="fa-solid fa-user fa-2xl"
-                      style="color: #000000"
-                    ></i>
-                    <h6>Account Settings</h6>
-                    </a>
-                  </div>
-                </div>
-              </div> -->
+              
             </div>
           </div>
-          <!-- </div> -->
+          
         </div>
       </div>
     </div>
@@ -331,6 +289,7 @@
     <br />
 
     <script>
+      
       var loadFile = function (event) {
         var image = document.getElementById("output");
         image.src = URL.createObjectURL(event.target.files[0]);
@@ -350,12 +309,12 @@
 
           const name = document.getElementById("name").value;
           const email = document.getElementById("email").value;
-          // const phone = document.getElementById("phone").value;
 
+          
           const formData = {
             name: name,
             email: email,
-            // phone: phone,
+
           };
 
           fetch("/updateProfile", {

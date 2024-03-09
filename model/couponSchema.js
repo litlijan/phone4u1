@@ -5,12 +5,11 @@ const CouponSchema = new mongoose.Schema({
   couponName: String,
   usedBy: [
     {
-      userId: Schema.Types.ObjectId,
-      couponCode: Schema.Types.ObjectId,
-      status: {type: String, default: 'Attempted'}
+      type: mongoose.Schema.Types.ObjectId,
+      ref:"user",
     }
   ],
-  couponCode: { type: String, required: true, unique: true },
+  couponCode: { type: String, unique: true },
   discountType: { type: String, enum: ["percentage", "fixed"] },
   amount: Number,
   minAmount: Number,

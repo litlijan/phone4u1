@@ -1,305 +1,543 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
-    <style>
-        @media (min-width: 1025px) {
-.h-custom {
-height: 100vh !important;
-}
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    @media (min-width: 1025px) {
+      .h-custom {
+        height: 100vh !important;
+      }
+    }
 
-.horizontal-timeline .items {
-border-top: 2px solid #ddd;
-}
+    .horizontal-timeline .items {
+      border-top: 2px solid #ddd;
+    }
 
-.horizontal-timeline .items .items-list {
-position: relative;
-margin-right: 0;
-}
+    .horizontal-timeline .items .items-list {
+      position: relative;
+      margin-right: 0;
+    }
 
-.horizontal-timeline .items .items-list:before {
-content: "";
-position: absolute;
-height: 8px;
-width: 8px;
-border-radius: 50%;
-background-color: #ddd;
-top: 0;
-margin-top: -5px;
-}
+    .horizontal-timeline .items .items-list:before {
+      content: "";
+      position: absolute;
+      height: 8px;
+      width: 8px;
+      border-radius: 50%;
+      background-color: #ddd;
+      top: 0;
+      margin-top: -5px;
+    }
 
-.horizontal-timeline .items .items-list {
-padding-top: 15px;
-}
-.blue-text {
-  color: green;
-}
-.modal-backdrop {
-    background-color: rgba(0, 0, 0, 0.5) !important; 
-  }
- </style>
+    .horizontal-timeline .items .items-list {
+      padding-top: 15px;
+    }
+
+    .blue-text {
+      color: green;
+    }
+
+    .modal-backdrop {
+      background-color: rgba(0, 0, 0, 0.5) !important;
+    }
+    #paymentPaid{
+      display: none;
+    }
+  </style>
 </head>
-<body>
-    <%-include('./partials/user-nav') %>
 
-    
-  <div class="container">
-    <div class="row">
-      <% if (orders.length === 0) { %>
-     
-        <div class="col-md-12 mt-5" style="height: 220px;" >
-          <div class="card border-rounded shadow">
-              <div class="card-body">
-                  <h3 class="card-title">No Order History</h3>
-              </div>
-              
-          </div>
-        </div>
-        
-      <% } else { %>
-        <% orders.forEach(order => { %>
-        <!-- Start of order card -->
-        <div class="col-md-6 mt-3">
+<body>
+  <%-include('./partials/user-nav') %>
+
+
+    <div class="container">
+      <div class="row">
+        <% if (orders.length===0) { %>
+
+          <div class="col-md-12 mt-5" style="height: 220px;">
             <div class="card border-rounded shadow">
-                <div class="card-body">
+              <div class="card-body">
+                <h3 class="card-title">No Order History</h3>
+              </div>
+
+            </div>
+          </div>
+
+          <% } else { %>
+            <% orders.forEach(order=> { %>
+              <!-- Start of order card -->
+              <div class="col-md-6 mt-3">
+                <div class="card border-rounded shadow">
+                  <div class="card-body">
                     <h4 class="mt-4">Products Bought:</h4>
                     <ul>
-                      <% order.Items.forEach((item) => { %>
+                      <% order.Items.forEach((item)=> { %>
                         <li>
-                            <% if (item.productId && item.productId.name) { %>
-                                <b>
-                                  <%= item.productId.name %> 
-                                </b>
-                                <% if (item.productId.beforeOffer) { %>
-                                  <% if (item.productId.beforeOffer !== item.productId.descountedPrice) { %>
-                                      <% const Calculete = (item.productId.beforeOffer - item.productId.descountedPrice); %>
-                                      <% const Mat = Math.floor((Calculete / item.productId.beforeOffer) * 100); %>
-                                      <h6 style="margin-left: 8px;"> You got <span class="badge rounded-pill bg-warning text-dark">  <%= Mat %> OFF </span> for this Product</h6>
-                                  <% } %>
-                              <% } %>
-                              <br>                              
-                                 Quantity: <%= item.quantity %>
+                          <% if (item.productId && item.productId.name) { %>
+                            <b>
+                              <%= item.productId.name %>
+                            </b>
+                            <% if (item.productId.beforeOffer) { %>
+                              <% if (item.productId.beforeOffer !==item.productId.descountedPrice) { %>
+                                <% const Calculete=(item.productId.beforeOffer - item.productId.descountedPrice); %>
+                                  <% const Mat=Math.floor((Calculete / item.productId.beforeOffer) * 100); %>
+                                    <h6 style="margin-left: 8px;"> You got <span
+                                        class="badge rounded-pill bg-warning text-dark">
+                                        <%= Mat %> OFF
+                                      </span> for this Product</h6>
+                                    <% } %>
+                                      <% } %>
+                                        <br>
+                                        Quantity: <%= item.quantity %>
 
-                            <% } else { %>
-                                Product information not available
-                            <% } %>
+                                          <% } else { %>
+                                            Product information not available
+                                            <% } %>
                         </li>
                         <br>
-                    <% }); %>
-                    
+                        <% }); %>
+
                     </ul>
-                  
-                 
+
+
                     <p class="card-text">Order ID : <b>ODR[<%= order._id %>]</b> </p>
-                  
-                    <% let orderDate = new Date(order.OrderDate) %>
-                    <p class="card-text">
+
+                    <% let orderDate=new Date(order.OrderDate) %>
+                      <p class="card-text">
                         Ordered Date and Time:
-                        <%= orderDate.toLocaleDateString() || 'N/A' %> <%= orderDate.toLocaleTimeString() || 'N/A' %>
-                    </p>
-                    <p class="card-text">
-                      Expected Delivery Date and Time:
-                      <% if (order.ExpectedDeliveryDate) { %>
-                          <%= (new Date(order.ExpectedDeliveryDate)).toLocaleString() %> 
-                      <% } else { %>
-                          N/A
-                      <% } %>
-                  </p>
-                  
-                    <p class="card-text">Total Price :<span class="blue-text"><b><%= total %> Rs only</b></span></p>
-                    <p class="card-text">Order Status:<b> <%= order.Status %></b></p>
-                    <p class="card-text">Payment Method: <%= order.PaymentMethod %></p>
-                   
-                    <p class="card-text">
-                     Ordered Address:
-                      <%= order.Address.Address %>, 
-                      <%= order.Address.City %>, 
-                      <%= order.Address.State %>
-                       - <%= order.Address.Pincode %>
-                    </p>
+                        <%= orderDate.toLocaleDateString() || 'N/A' %>
+                          <%= orderDate.toLocaleTimeString() || 'N/A' %>
+                      </p>
+                      <p class="card-text">
+                        Expected Delivery Date and Time:
+                        <% if (order.ExpectedDeliveryDate) { %>
+                          <%= (new Date(order.ExpectedDeliveryDate)).toLocaleString() %>
+                            <% } else { %>
+                              N/A
+                              <% } %>
+                      </p>
 
-                    <button type="button" class="btn btn-dark m-2">
-                        <a href="/user/userdashboard" style="text-decoration: none; color: rgb(255, 255, 255);">View Product</a>
-                          </button>
+                      <p class="card-text">Total Price :<span class="blue-text"><b>
+                            <%= total %> Rs only
+                          </b></span></p>
+                      <p class="card-text">Order Status:<b>
+                          <%= order.Status %>
+                        </b></p>
+                        <p class="card-text">Payment Status: <b><%= order.PaymentStatus %></b></p> 
+                      <p class="card-text">Payment Method: <%= order.PaymentMethod %>
+                      </p>
 
-                          <!-- <button type="button" class="btn btn-dark m-2">
-                            <a href="/orderLists" style="text-decoration: none; color: rgb(255, 255, 255);">Order list</a>
-                          </button> -->
-                    <br>
-                    <p class="lead fw-bold mb-4 pb-2" style="color: #f37a27;">Tracking Order</p>
-                    <div class="row">
+                      <p class="card-text">
+                        Ordered Address:
+                        <%= order.Address.Address %>,
+                          <%= order.Address.City %>,
+                            <%= order.Address.State %>
+                              - <%= order.Address.Pincode %>
+                      </p>
+
+                      <button type="button" class="btn btn-dark m-2">
+                        <a href="/user/userdashboard" style="text-decoration: none; color: rgb(255, 255, 255);">View
+                          Product</a>
+                      </button>
+
+                      
+                      <button type="button" class="btn btn-primary m-2" id="payment<%= order.PaymentStatus %>" onclick="continuepayment('<%= order._id %>','<%= total%>')">
+                         Continue payment
+                      </button>
+
+                      <br>
+                      <p class="lead fw-bold mb-4 pb-2" style="color: #f37a27;">Tracking Order</p>
+                      <div class="row">
                         <div class="col-lg-12">
-                            <div class="horizontal-timeline">
-                                <ul class="list-inline items d-flex justify-content-between">
-                                    <li class="list-inline-item items-list">
-                                        <p class="py-1 px-2 rounded text-white" style="background-color: #f37a27;">Ordered</p>
+                          <div class="horizontal-timeline">
+                            <ul class="list-inline items d-flex justify-content-between">
+                              <li class="list-inline-item items-list">
+                                <p class="py-1 px-2 rounded text-white" style="background-color: #f37a27;">Ordered</p>
+                              </li>
+                              <% if (order.Status==="Cancelled" ) { %>
+                                <li class="list-inline-item items-list">
+                                  <p class="py-1 px-2 rounded text-white" style="background-color: #f37a27;">Order
+                                    Cancelled</p class="py-1 px-2 rounded text-white"
+                                    style="background-color: #f37a27;">
+                                </li>
+                                <% } else if (order.Status==="Shipped" ) { %>
+                                  <li class="list-inline-item items-list">
+                                    <p class="py-1 px-2 rounded text-white" style="background-color: #f37a27;">Shipped
+                                    </p class="py-1 px-2 rounded text-white" style="background-color: #f37a27;">
+                                  </li>
+                                  <li class="list-inline-item items-list">
+                                    <p class="py-1 px-2 rounded text-white" style="background-color: #f37a27;">On the
+                                      way
+                                    </p>
+                                    <br>
+                                    <i class="fa-solid fa-truck fa-bounce fa-2xl"></i>
+                                  </li>
+                                  <li class="list-inline-item items-list">
+                                    <p class="py-1 px-2 rounded text-white">
+                                    </p>
+                                  </li>
+
+                                  <% } else if (order.Status==="Delivered" ) { %>
+
+                                    <li class="list-inline-item items-list text-end" style="margin-right: 8px;">
+                                      <p class="py-1 px-2 rounded text-white" style="background-color: #f37a27;">
+                                        Delivered</p>
                                     </li>
-                                    <% if (order.Status === "Cancelled") { %>
-                                        <li class="list-inline-item items-list">
-                                            <p class="py-1 px-2 rounded text-white" style="background-color: #f37a27;">Order Cancelled</p
-                                              class="py-1 px-2 rounded text-white" style="background-color: #f37a27;">
+
+                                    <% } else if(order.Status==="Rejected" ) { %>
+                                      <li class="list-inline-item items-list text-end " style="margin-right: 8px;">
+                                        <span class="py-1 px-2 rounded text-white"
+                                          style="background-color: #f37a27;">Rejected By Seller</span>
+                                      </li>
+                                      <% } else if(order.Status==="Return Pending" ) { %>
+                                        <li class="list-inline-item items-list text-end " style="margin-right: 8px;">
+                                          <span class="py-1 px-2 rounded text-white"
+                                            style="background-color: #f37a27;">Return Pending</span>
+                                        </li>
+                                        <% } else if(order.Status==="Return Accepted" ) { %>
+                                          <li class="list-inline-item items-list text-end " style="margin-right: 8px;">
+                                            <span class="py-1 px-2 rounded text-white"
+                                              style="background-color: #f37a27;">Returned</span>
                                           </li>
-                                          <% } else if (order.Status === "Shipped") { %>
-                                            <li class="list-inline-item items-list">
-                                                <p class="py-1 px-2 rounded text-white" style="background-color: #f37a27;">Shipped</p
-                                                  class="py-1 px-2 rounded text-white" style="background-color: #f37a27;">
-                                              </li>
-                                              <li class="list-inline-item items-list">
-                                                <p class="py-1 px-2 rounded text-white" style="background-color: #f37a27;">On the way
-                                                </p>
-                                                <br>
-                                                <i class="fa-solid fa-truck fa-bounce fa-2xl"></i>
-                                              </li>
-                                              <li class="list-inline-item items-list">
-                                                <p class="py-1 px-2 rounded text-white">
-                                                </p>
-                                              </li>
+                                          <% } %>
 
-                                              <% } else if (order.Status === "Delivered") { %>
-                                               
-                                              <li class="list-inline-item items-list text-end" style="margin-right: 8px;"> 
-                                                <p class="py-1 px-2 rounded text-white" style="background-color: #f37a27;">Delivered</p>
-                                              </li>
-                                             
-                                              <% } else if(order.Status === "Rejected" ) { %> 
-                                                <li class="list-inline-item items-list text-end " style="margin-right: 8px;">
-                                                  <span class="py-1 px-2 rounded text-white" style="background-color: #f37a27;">Rejected By Seller</span> 
-                                                </li>
-                                                <% } else if(order.Status === "Return Pending" ) { %> 
-                                                  <li class="list-inline-item items-list text-end " style="margin-right: 8px;">
-                                                    <span class="py-1 px-2 rounded text-white" style="background-color: #f37a27;">Return Pending</span> 
-                                                  </li>
-                                                  <% } else if(order.Status === "Return Accepted" ) { %> 
-                                                    <li class="list-inline-item items-list text-end " style="margin-right: 8px;">
-                                                      <span class="py-1 px-2 rounded text-white" style="background-color: #f37a27;">Returned</span> 
-                                                    </li>
-                                                  <% } %>
-                                   
-                                </ul>
-                              
-                            </div>
-                        </div>
-                    </div>
-                   
-                </div>
-                <div class="col-md-12 d-flex">
-                    <div class="col-md-8 d-flex">
-                        <p class="mt-4 ms-3">Want any help? <a href="/aboutus" style="color: #f37a27;">Please contact us</a></p>
-                        <% if (order.Status === "Delivered") { %>
-                          <div>
-                            <button type="button" class="btn btn-danger ms-3 mt-4" data-bs-toggle="modal" data-bs-target="#returnOrderModal<%= order._id %>">
-                              Return Order
-                            </button>
+                            </ul>
+
                           </div>
+                        </div>
+                      </div>
+
+                  </div>
+                  <div class="col-md-12 d-flex">
+                    <div class="col-md-8 d-flex">
+                      <p class="mt-4 ms-3">Want any help? <a href="/aboutUs" style="color: #f37a27;">Please contact
+                          us</a></p>
+                      <% if (order.Status==="Delivered" ) { %>
 
 
-                            <div class="modal fade" id="returnOrderModal<%= order._id %>"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="returnOrderModalLabel" aria-hidden="true">
-                              <div class="modal-dialog ">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <h5 class="modal-title" id="returnOrderModalLabel">Return Order</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <label for="returnReason">Reason for Return:</label>
-                                    <textarea id="returnReason<%= order._id %>" class="form-control" rows="3"></textarea>
-                                  </div>
-                                  <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary" onclick="submitReturn('<%= order._id %>')">Submit Return</button>
-                                  </div>
-                                </div>
+                        <div class="modal fade" id="returnOrderModal<%= order._id %>" data-bs-keyboard="false"
+                          tabindex="-1" aria-labelledby="returnOrderModalLabel" aria-hidden="true">
+                          <div class="modal-dialog ">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="returnOrderModalLabel">Return Order</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <label for="returnReason">Reason for Return:</label>
+                                <textarea id="returnReason<%= order._id %>" class="form-control" rows="3"></textarea>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary"
+                                  onclick="submitReturn('<%= order._id %>')">Submit Return</button>
                               </div>
                             </div>
+                          </div>
+                        </div>
 
 
-                         
-                          <% } else if(order.Status === "Rejected" ) { %> 
-                            <div class="text-danger">
-                              <b><span>Because of some Technical issues we can't confirm this order</span></b>
-                            </div>
-                            <% } %>
+
+                        <% } else if(order.Status==="Rejected" ) { %>
+                          <div class="text-danger">
+                            <b><span>Because of some Technical issues we can't confirm this order</span></b>
+                          </div>
+                          <% } %>
                     </div>
                     <div class="col-md-4 mt-3 d-flex justify-content-end">
-                             
-                      <% if (order.Status === "Delivered") { %>
-                        <button type="button" class="btn btn-dark m-2" onclick="generateAndDownloadInvoice('<%= order._id %>')">
+
+                      <% if (order.Status==="Delivered" ) { %>
+                        <button type="button" class="btn btn-dark m-2"
+                          onclick="generateAndDownloadInvoice('<%= order._id %>')">
                           Download Invoice
-                      </button>
-                    
-                    <% } else if (order.Status !== "Cancelled" && order.Status !== "Rejected" && order.Status !== "Return Pending" && order.Status !== "Return Accepted") { %>
-                        <button type="button" class="btn btn-dark m-2">
-                            <a href="/cancelorder/<%= order._id %>" onclick="return confirm('Are you sure you want to cancel this order?');" style="text-decoration: none; color: rgb(255, 255, 255);">Cancel Order</a>
                         </button>
-                    <% } %>
-                    
+
+                        <% } else if (order.Status !=="Cancelled" && order.Status !=="Rejected" && order.Status
+                          !=="Return Pending" && order.Status !=="Return Accepted" ) { %>
+                          <button type="button" class="btn btn-dark m-2" onclick="showCustomPopup('<%= order._id %>')">
+                            Cancel Order
+                          </button>
+
+                          <div id="customPopup" class="custom-popup">
+                            <div class="popup-content">
+                              <h2>Confirmation</h2>
+                              <p>Are you sure you want to cancel this order?</p>
+                              <div class="button-container">
+                                <button onclick="cancelOrder('<%= order._id %>')">Yes</button>
+                                <button onclick="hideCustomPopup()">No</button>
+                              </div>
+                            </div>
+                          </div>
+                          <% } %>
+
                     </div>
-                   
+
+                  </div>
                 </div>
-            </div>
-        </div>
+              </div>
 
 
-        
-        <!-- End of order card -->
-        <% }); %>
-        <% } %>
+
+              <!-- End of order card -->
+              <% }); %>
+                <% } %>
+      </div>
     </div>
-            </div>
-<br>
-<br>
-<script>
+    <br>
+    <br>
 
+    <style>
+      .custom-popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+      }
 
-function submitReturn(orderIdParam) {
-    const returnReason = document.getElementById(`returnReason${orderIdParam}`).value;
-    const orderId = orderIdParam; 
-console.log(returnReason);
-    fetch('/submitreturn', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        orderId: orderId,
-        returnReason: returnReason,
-      }),
+      .popup-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        text-align: center;
+      }
+
+      .button-container {
+        margin-top: 20px;
+      }
+
+      .button-container button {
+        margin: 0 10px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .button-container button:first-child {
+        background-color: #3085d6;
+        color: #fff;
+      }
+
+      .button-container button:last-child {
+        background-color: #d33;
+        color: #fff;
+      }
+    </style>
+    <script src="https://unpkg.com/easyinvoice/dist/easyinvoice.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+      
+    function continuepayment(id,total){
+     
+      $.ajax({ 
+        url:'/failedpayment',
+        method: 'post',
+         data:  { id: id ,total:total},
+        success: (response) => {
+         if(response.online) {
+           
+          handlePayNowClick(response)
+        }else{
+          alert(response.error)
+          if(confirm){
+            window.location='/user/trackOrder'
+          }
+        }
+      }
     })
-      .then((response) => response.text())
-      .then((data) => {
-        
-        location.reload();
-      })
-      .catch((error) => {
-        console.error('Error submitting return reason:', error);
-      });
 
-    $('#returnOrderModal').modal('hide');
+  function handlePayNowClick (order) {
+    var options = {
+    "key": "rzp_test_nz16kmykXJ1LF3",
+    "amount": order.createdOrder.amount, 
+    "currency": "INR",
+    "name": "phone4u",
+    "description": "Test Transaction",
+    "image": "/images/phone4u",
+    "order_id": order.createdOrder.id, 
+    "handler": function (response){
+        verifyPayment(response, order)
+    },
+    "prefill": {
+      "user": order.order.UserId,
+    },
+    "notes": {
+      "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+      "color": "#3399cc"
+    }
+  };
+  var rzp1 = new Razorpay(options);
+  rzp1.on('payment.failed', function (resp) {
+            console.log('error:', resp.error.code);
+            console.log('error:', resp.error.description);
+            console.log('error:', resp.error.source);
+            console.log('error:', resp.error.step);
+            console.log('error:', resp.error.reason);
+            console.log('error:', resp.error.metadata.order_id);
+            console.log('error:', resp.error.metadata.payment_id);
+          
+            window.location.href = '/user/trackOrder'  
+        });
+  rzp1.open();
   }
+  function verifyPayment (payment, order) {
+    $.ajax({
+      url: '/failed',
+      data: {
+        payment,
+        order
+      },
+      method: 'post',
+      success: (response) => {
+        if (response.success) {
+          console.log('response got')
+          location.href = '/user/trackOrder'
+        }else{
+          console.log('response not get');
+          location.href = '*'
+        }
+      }
+    })
+  }
+    }
+      </script>
+
+    <script>
+
+  async function generateAndDownloadInvoice(orderId) {
+    let timerInterval
+    Swal.fire({
+      title: 'Download Started!',
+      html: 'I will close in <b></b> milliseconds.',
+      timer: 4000,
+      timerProgressBar: true,
+      didOpen: () => {
+        Swal.showLoading()
+        const b = Swal.getHtmlContainer().querySelector('b')
+        timerInterval = setInterval(() => {
+          b.textContent = Swal.getTimerLeft()
+        }, 100)
+      },
+      willClose: () => {
+        clearInterval(timerInterval)
+      }
+    }).then((result) => {
+      if (result.dismiss === Swal.DismissReason.timer) {
+      }
+    })
+
+    try {
+      const response = await fetch('/downloadinvoice', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ orderId })
+      });
+      response.json()
+        .then(details => {
+          const modifiedArray = details.orderDetails.Items.map((value) => {
+            return {
+              quantity: value.Quantity,
+              description: value.ProductId?.name,
+              price: value.ProductId.price,
+            };
+          });
+
+          var data = {
+            "images": {},
+            "sender": {
+              "company": "phone4u",
+              "address": "Industrialpark Calicut PO,Kakkanchery",
+              "zip": "1234 AB",
+              "city": "Kozhikode",
+              "country": "India"
+            },
+            "client": {
+              "company": details.orderDetails.Address.Name,
+              "address": details.orderDetails.Address.State,
+              "zip": details.orderDetails.Address.Pincode,
+              "city": details.orderDetails.Address.City,
+              "country": "India"
+            },
+            "information": {
+              "number": details.orderDetails.Address.Mobile,
+              "date": details.orderDetails.OrderDate.slice(0, 10),
+            },
+            "products": [],
+            "bottom-notice": "Automatically generated Invoice",
+            "settings": {
+              "currency": "INR",
+              "margin-top": 50,
+              "margin-right": 50,
+              "margin-left": 50,
+              "margin-bottom": 25
+            }
+          }
+          data.products.push(...modifiedArray);
+          easyinvoice.createInvoice(data, function (result) {
+            easyinvoice.download('invoice.pdf')
+          });
+
+        })
+        .catch(error => {
+          console.error('Error fetching invoice:', error);
+        });
+    } catch (error) {
+      console.error('Error fetching invoice:', error);
+    }
+  }
+</script>
 
 
-  
-  
-  </script>
-  
-  
+    <script>
+      function showCustomPopup(orderId) {
+        document.getElementById('customPopup').style.display = 'flex';
+      }
 
-  
+      function hideCustomPopup() {
+        document.getElementById('customPopup').style.display = 'none';
+      }
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+      function cancelOrder(orderId) {
+        window.location.href = "/cancelorder/" + orderId;
+      }
+    </script>
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+      integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+      integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+      crossorigin="anonymous"></script>
 
 </body>
+
 </html>
 
 <%-include('./partials/user-footer') %>

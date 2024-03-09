@@ -14,7 +14,7 @@ const CartSchema= new Schema({
         },
       }
     ],
-    TotalAmount: {
+    Total: {
       type: Number,
     },
    

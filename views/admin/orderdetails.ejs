@@ -24,52 +24,140 @@
             <div class="recentOrders">
                 <div class="cardHeader">
                     <h1>Order List</h1>
-                      <a href="/admin/orders" class="btn">back</a>
+                    <a href="/admin/orders" class="btn btn-back">Back</a>
                 </div>
-
-               
-
-                <div class="card shadow p-5 m-2">
-                    <div class="order-details">
+        
+                <div class="card shadow">
+                    <div class="customer-info">
                         <h2>Customer Information</h2>
-                        <h6>Name: <%= customerName %></h6>
-                        <p>Address: <%= customerAddress.AddressLane %>, <%= customerAddress.City %>, <%= customerAddress.State %>, <%= customerAddress.Pincode %></p>
+                        <h3><%= customerName %></h3>
+                        <p><%= customerAddress.AddressLane %><br><%= customerAddress.City %>, <%= customerAddress.State %>, <%= customerAddress.Pincode %></p>
                     </div>
-
-                    <div class="order-total ">
-                        <!-- <h5>Total Order Price: Rs.  </h5> -->
+        
+                    <div class="order-details">
+                        <h2>Ordered Products</h2>
+                        <% OrderedProducts.forEach((product) => { %>
+                        <div class="product-card">
+                            <div class="product-image">
+                                <img src="/uploads/<%= product?.ProductId.images[0] %>" alt="Product Image">
+                            </div>
+                            <div class="product-info">
+                                <h4 class="product-name"><%= product.ProductId.name %></h4>
+                                <p class="product-quantity">Quantity: <%= product.Quantity %></p>
+                            </div>
+                        </div>
+                        <% }); %>
                     </div>
-
-                <% orderedProducts.forEach((product) => { %>
-                   
-                <div class="product-card-img" style="padding: 30px;">
-                    <!-- <label class="stock bg-success">In Stock</label> -->
-                    <td><img src="/product-images/<%= product?.productId.images[0]?.mainimage %>"  alt="Image Deleted" style="height: 250px;"></td>
                 </div>
-                <div class="product-card-body">
-                   
-                    <p class="product-brand ">Quantity: <%= product.quantity %></p>
-                    <h5 class="product-name">
-                        
-                        <%= product.productId.name %>
-                       
-                    </h5>
-                  
-
             </div>
-            </div>
-            <% }); %>
-
-            
-
-           
-            
         </div>
+        
+<style>
+/* Styles for the cardHeader */
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #6c5ce7; /* Purple */
+    color: white;
+}
+
+.cardHeader h1 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.btn {
+    padding: 10px 20px;
+    background-color: #fdcb6e; /* Yellow */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #f0932b; /* Darker Yellow */
+}
+
+.btn-back {
+    background-color: #e74c3c; /* Red */
+}
+
+/* Styles for the customer-info */
+.customer-info {
+    padding: 20px;
+    border-bottom: 1px solid #dfe7ef;
+}
+
+.customer-info h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #2d3436; /* Black */
+}
+
+.customer-info h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: #2d3436; /* Black */
+}
+
+.customer-info p {
+    font-size: 16px;
+    margin: 0;
+    color: #576574; /* Dark Gray */
+}
+
+/* Styles for the order-details */
+.order-details {
+    padding: 20px;
+}
+
+.order-details h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #2d3436; /* Black */
+}
+
+/* Styles for the product-card */
+.product-card {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    border: 1px solid #dfe7ef;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #f5f6fa; /* Light Gray */
+}
+
+.product-image img {
+    width: 50%;
+    height: 80%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.product-info {
+    flex: 1;
+    padding: 10px;
+}
+
+.product-name {
+    font-size: 18px;
+    margin: 0;
+    color: #2d3436; /* Black */
+}
+
+.product-quantity {
+    font-size: 16px;
+    margin: 0;
+    color: #576574; /* Dark Gray */
+}
 
 
-    </div>
-</div>
-
+</style>        
+        
 
 
         <script

@@ -21,16 +21,18 @@ const ReturnRequestSchema = new Schema({
 
 
 const OrdersSchema = new Schema({
-  UserId: { type: Schema.Types.ObjectId, ref: "users" },
+  randomOrderId :{type:String},
+  UserId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
   Status: { type: String, default:"Order Placed"},
   Items: [{
-     productId: { type: Schema.Types.ObjectId , ref: "product" },
-     quantity: { type: Number },
+    ProductId: { type: mongoose.Schema.Types.ObjectId, ref: 'product' },
+    Quantity: { type: Number },
   }],
+  
   PaymentMethod: {type: String},
   OrderDate: { type: Date, required: true },
   ExpectedDeliveryDate:{type: Date, required: true},
-  TotalPrice: { type: Number },
+  Total: { type: Number },
   PaymentStatus: {type: String, default: "Pending"},
   CouponId: { type: Schema.Types.ObjectId },
   Address: { type: ShippedAddressSchema },

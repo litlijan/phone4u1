@@ -8,6 +8,8 @@ const otpcontroller = require('../contoller/otpcontroller');
 const usercontroller = require('../contoller/usercontroller');
 const orderController=require('../contoller/orderController')
 
+
+
 const userauths=require('../middleware/userauth')
 
 router.get('/',usercontroller.tohome);
@@ -19,6 +21,7 @@ router.get('/user/sign',usercontroller.toSignup);
 router.post('/user/signup', usercontroller.signup);
 router.get('/user/userdashboard',userauths.verifyUser, usercontroller.touserdash)
 router.get('/user/home',usercontroller.tologout)
+router.get('/user/productDetails/:id', usercontroller.details);
 router.get('/user/restpassword',usercontroller.restpassword)
 //.......................................
 router.get('/forgotPwd', usercontroller.forgotPwd)
@@ -30,7 +33,7 @@ router.get('/passwordResendOtp', usercontroller.PasswordResendOtp)
 
 
 
-router.post('/updateQuantity',userauths.verifyUser,cartcontroller.updatingQuantity)
+
 
 // Handle OTP sending
 router.get('/sendotp', usercontroller.otpsender);
@@ -39,7 +42,7 @@ router.post('/postSignUp', usercontroller.otpverify)
 
 router.get('/userProductDetails/:id',userauths.verifyUser,usercontroller.getUserProductDetails);
 
-router.get('/user/resendotp',userauths.verifyUser,usercontroller.resendOtp)
+router.get('/resendotp',userauths.verifyUser,usercontroller.resendOtp)
 
 //cart 
 
@@ -48,7 +51,7 @@ router.post('/user/cart',userauths.verifyUser, cartcontroller.postcart)
 router.post('/addtocart',userauths.verifyUser, cartcontroller.getcart)
 router.get('/removefromcart/:_id', userauths.verifyUser,cartcontroller.removeFromCart)
 router.get('/user/checkout',userauths.verifyUser,cartcontroller.PlaceOrder)
-// router.post('/user-make-purchase',cartcontroller.outofstock)
+router.post('/updateQuantity',userauths.verifyUser,cartcontroller.updatingQuantity)
 
 //userprofile
 
@@ -61,6 +64,7 @@ router.post('/edituserAddress/:addressId',userauths.verifyUser,usercontroller.up
 router.post('/updateProfile',userauths.verifyUser,usercontroller.updateProfile)
 router.post('/userPasswordReset',userauths.verifyUser,usercontroller.userPasswordReset)
 
+
 // order
 
 router.post('/addAddress-Checkout',userauths.verifyUser,usercontroller.orderAddress)
@@ -70,12 +74,21 @@ router.get('/user/trackOrder',userauths.verifyUser,usercontroller.orderHistory)
 router.get('/cancelorder/:orderId',userauths.verifyUser,usercontroller.cancelOrder)
 router.post('/verify-payment',userauths.verifyUser,orderController.verifyPayment)
 router.get('/orderLists',userauths.verifyUser,usercontroller.orderlists)
-
+router.get('/aboutUs',userauths.verifyUser,usercontroller.about)
+router.get('/downloadinvoice/:orderId',userauths.verifyUser,usercontroller.downloadInvoice)
+router.post('/downloadinvoice',userauths.verifyUser,usercontroller.generateInvoices)
+router.post('/failedpayment',userauths.verifyUser,usercontroller.payment)
+router.post('/failed',userauths.verifyUser,usercontroller.failedpayment)
 
 //coupoun
 
 router.get('/coupoun',userauths.verifyUser,usercontroller.getcoupoun)
-router.get('/checkCoupon',userauths.verifyUser,usercontroller.postcoupoun)
+router.post('/checkCoupon',userauths.verifyUser,usercontroller.postcoupoun)
+ 
+
+
+
+
 
 module.exports = router;
 

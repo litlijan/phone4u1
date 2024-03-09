@@ -16,11 +16,13 @@ module.exports={
      },
      addcoupon:async(req,res)=>{
       try {
+         console.log(req.body,"coupon body2222222222222222222222");
       
          if(req.body.discountType=='fixed')
          {
             console.log(req.body.discountType,'3333333333333333333333333333333333');
             req.body.amount=req.body.amount[1];
+            console.log(req.body.amount,"77777777777777777777777777");
          }else if(req.body.discountType=='percentage')
          {
             req.body.amount=req.body.amount[0];
@@ -60,7 +62,6 @@ module.exports={
       try {
          
          const couponId = req.params.couponId;
-         console.log(couponId,'3333333333333333333333333333333333333333333');
          const coupon = await coupons.findById(couponId);
          res.render('./admin/editCoupon', { coupon });
       } catch (error) {
@@ -69,9 +70,10 @@ module.exports={
    },
    editcouponpost:async(req,res)=>{
       try {
+         
          const { couponName, couponCode, discountType, minAmount, maxAmount, minAmountFixed, limit, couponType, startDate, endDate } = req.body;
          const coupon=await coupons.findById(req.params.couponId)
-         console.log(coupon,"77777777777777777777777777777777");
+         
          let amount=0
          if(discountType== 'percentage'){
           amount = Array.isArray(req.body.amount) ? req.body.amount[0] : req.body.amount;
